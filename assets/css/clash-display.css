@@ -1,0 +1,47 @@
+/**
+ * ===== OUTLETTECH CUSTOM TYPOGRAPHY =====
+ * 
+ * TRAINEE NOTE: ClashDisplay es una fuente variable moderna diseñada para títulos
+ * - Es una fuente sans-serif con personalidad única
+ * - Soporta pesos de 200 (extralight) a 700 (bold)
+ * - Fuente variable: permite ajustar el peso con precisión
+ * - font-display: swap mejora la performance de carga
+ * 
+ * USO RECOMENDADO:
+ * - Títulos principales (h1, h2, h3)
+ * - Textos destacados
+ * - Branding y logos
+ * 
+ * ALTERNATIVAS GRATUITAS:
+ * - Inter (Google Fonts)
+ * - Poppins (Google Fonts) 
+ * - Montserrat (Google Fonts)
+ */
+
+/* ===== DEFINICIÓN DE LA FUENTE VARIABLE ===== */
+@font-face {
+    font-family: 'ClashDisplay';
+    src: url('../fonts/ClashDisplay-Variable.woff2') format('woff2'),
+         url('../fonts/ClashDisplay-Variable.woff') format('woff'),
+         url('../fonts/ClashDisplay-Variable.ttf') format('truetype');
+    font-weight: 200 700; /* Rango de pesos disponibles */
+    font-display: swap; /* TRAINEE: Mejora la performance, evita FOIT (Flash of Invisible Text) */
+    font-style: normal;
+}
+
+/* ===== UTILIDADES DE PESO PERSONALIZADO ===== */
+/* TRAINEE NOTE: Estas clases facilitan el uso de diferentes pesos de la fuente */
+.clash-extralight { font-variation-settings: 'wght' 200; }
+.clash-light { font-variation-settings: 'wght' 300; }
+.clash-regular { font-variation-settings: 'wght' 400; }
+.clash-medium { font-variation-settings: 'wght' 500; }
+.clash-semibold { font-variation-settings: 'wght' 600; }
+.clash-bold { font-variation-settings: 'wght' 700; }
+
+/* ===== FALLBACKS PARA MEJOR COMPATIBILIDAD ===== */
+/* TRAINEE: Si ClashDisplay no carga, usará fuentes del sistema */
+.clash-display-fallback {
+    font-family: 'ClashDisplay', 'Inter', -apple-system, BlinkMacSystemFont, 
+                 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+}
+

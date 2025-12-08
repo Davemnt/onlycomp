@@ -1,0 +1,1128 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <!-- ===== META TAGS ESENCIALES ===== -->
+    <!-- Codificación de caracteres UTF-8 para soporte completo de caracteres -->
+    <meta charset="utf-8">
+    <!-- Viewport responsive para dispositivos móviles -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <!-- ===== SEO BÁSICO ===== -->
+    <title>OutletTech - Reparación, Equipos Remanufacturados y PC a Medida</title>
+    <meta name="description" content="OutletTech: Especialistas en reparación de PCs, venta de equipos remanufacturados y armado de computadoras personalizadas en Buenos Aires.">
+    <meta name="keywords" content="reparación PC, equipos remanufacturados, armado PC, servicio técnico, Buenos Aires">
+    <meta name="author" content="OutletTech">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💻</text></svg>">
+    
+    <!-- ===== CDN LIBRARIES (TRAINEE: Usar siempre versiones específicas en producción) ===== -->
+    <!-- Bootstrap 5.2.0 - Framework CSS responsive -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css">
+    <!-- RemixIcon - Librería de iconos moderna -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+    <!-- Fancybox - Para lightbox de imágenes -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.css">
+    
+    <!-- ===== ESTILOS PERSONALIZADOS (TRAINEE: Siempre cargar CSS personalizado al final) ===== -->
+    <link rel="stylesheet" href="./assets/css/style.css">
+    <link rel="stylesheet" href="./assets/css/custom.css">
+</head>
+
+<!-- TRAINEE NOTE: data-bs-spy activa el scroll spy de Bootstrap para resaltar navegación activa -->
+<body data-bs-spy="scroll" data-bs-target=".navbar" data-bs-offset="70">
+
+    <!-- ESTILOS PERSONALIZADOS PARA NAVEGACIÓN SUAVE -->
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* 
+        ===== SISTEMA DE NAVBAR TRANSPARENTE =====
+        GUÍA DE DESARROLLO CSS:
+        
+        🎨 FILOSOFÍA DE DISEÑO:
+        - Estado inicial: Transparente para mostrar video de fondo
+        - Estado scroll: Fondo sólido para legibilidad durante navegación
+        - Transiciones suaves para experiencia fluida
+        
+        📝 TÉCNICAS IMPLEMENTADAS:
+        1. RGBA colors para transparencias controladas
+        2. text-shadow para legibilidad sobre video
+        3. backdrop-filter para efectos glassmorphism
+        4. transform para micro-interacciones
+        */
+        
+        /* Estado inicial del navbar - transparente */
+        .navbar-nav .nav-link {
+            color: rgba(255,255,255,0.9) !important; /* Blanco semitransparente */
+            font-weight: 500; /* Peso medio para buena legibilidad */
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5); /* Sombra para contraste sobre video */
+            transition: all 0.3s ease; /* Transición suave para todos los cambios */
+        }
+        
+        /* Efectos hover en links de navegación */
+        .navbar-nav .nav-link:hover {
+            color: #ffc107 !important; /* Amarillo dorado para hover */
+            transform: translateY(-2px); /* Micro-animación hacia arriba */
+        }
+        
+        /* Estado activo de navegación */
+        .navbar-nav .nav-link.active {
+            color: #ffc107 !important; /* Amarillo para página actual */
+            font-weight: 600; /* Peso mayor para indicar estado activo */
+        }
+        
+        /* Estilo del logo/brand */
+        .navbar-brand {
+            color: rgba(255,255,255,0.95) !important; /* Casi blanco opaco */
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7); /* Sombra más pronunciada */
+        }
+        
+        /* Botón de call-to-action en navbar */
+        .btn-outline-light {
+            border-color: rgba(255,255,255,0.8); /* Borde semitransparente */
+            color: rgba(255,255,255,0.9); /* Texto semitransparente */
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5); /* Sombra para legibilidad */
+        }
+        
+        /* 
+        ===== ESTADO NAVBAR CON SCROLL =====
+        ACTIVADO POR: IntersectionObserver + navegación tracking
+        TRIGGER: Salida del hero OR navegación manual
+        */
+        .navbar-scrolled {
+            background: rgba(33, 37, 41, 0.98) !important; /* Fondo más opaco para mejor legibilidad */
+            backdrop-filter: blur(15px) saturate(1.5); /* Efecto glassmorphism mejorado */
+            border-bottom: 1px solid rgba(255,255,255,0.15); /* Borde más visible */
+            box-shadow: 0 4px 30px rgba(0,0,0,0.2); /* Sombra más pronunciada */
+            transform: translateY(0); /* Asegurar posición correcta */
+        }
+        
+        /* Transición mejorada para el navbar */
+        #mainNavbar {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important; /* Curva de transición suave */
+            will-change: background-color, backdrop-filter, box-shadow; /* Optimización GPU */
+        }
+        
+        /* Preload de clases para evitar flash */
+        .navbar-preload {
+            transition: none !important;
+        }
+        
+        /* Offset para compensar navbar fijo */
+        section {
+            scroll-margin-top: 70px;
+        }
+        
+        /* Estilos mejorados para vitrina de productos */
+        .product-showcase:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.4);
+            border-color: rgba(255,255,255,0.4) !important;
+        }
+        
+        .showcase-image {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+    </style>
+
+    <!-- 
+    ===== NAVIGATION BAR - SISTEMA AVANZADO =====
+    GUÍA DE DESARROLLO COMPLETA:
+    
+    📋 ESTRUCTURA DEL NAVBAR:
+    - navbar-expand-lg: Colapsa en pantallas menores a 992px (lg breakpoint)
+    - sticky-top: Mantiene el navbar fijo en la parte superior durante scroll
+    - background: transparent inicial para mostrar el video de fondo
+    - transition: Animación suave de 0.3s para cambios de fondo
+    
+    📱 RESPONSIVE BEHAVIOR:
+    - Desktop: Menú horizontal completo
+    - Tablet/Mobile: Menú hamburguesa colapsable
+    
+    🎨 ESTADOS VISUALES:
+    1. INICIAL: Transparente con video visible de fondo
+    2. SCROLL: Fondo oscuro semitransparente activado por JavaScript
+    
+    🔧 INTEGRACIÓN TÉCNICA:
+    - ID 'mainNavbar' para JavaScript scroll detection
+    - Bootstrap 5 classes para responsive design
+    - GSAP animations para efectos suaves
+    -->
+    <nav class="navbar navbar-expand-lg sticky-top" id="mainNavbar" style="background: transparent; transition: all 0.3s ease; z-index: 1000;">
+        <div class="container-fluid px-4">
+            <div class="d-flex align-items-center">
+                <img src="./assets/images/circular-logo.png" alt="Only Comp Logo" class="me-2" style="width:40px; height:40px; object-fit:cover; border-radius:50%;">
+                <!-- BRAND/LOGO: Siempre visible, enlace a la página principal -->
+                <a class="navbar-brand text-white fw-bold fs-3 mb-0" href="#hero">
+                    Only Comp
+                </a>
+            </div>
+            
+            <!-- HAMBURGER BUTTON: Solo visible en móviles -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <!-- COLLAPSIBLE MENU: Se oculta en móviles, se muestra al hacer clic en hamburger -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <!-- NAVIGATION LINKS: ms-auto alinea a la derecha -->
+                <ul class="navbar-nav ms-auto me-3">
+                    <li class="nav-item">
+                        <a class="nav-link text-light px-3" href="#hero">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-light px-3" href="#portfolio">Productos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-light px-3" href="#services">Servicios</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-light px-3" href="#about">Nosotros</a>
+                    </li>                   
+                    <li class="nav-item">
+                        <a class="nav-link text-light px-3" href="#contact">Contacto</a>
+                    </li>
+                </ul>
+                <!-- CALL TO ACTION BUTTON -->
+                <a href="#contact" class="btn btn-outline-light px-4">Solicitar Servicio</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section id="hero" class="d-flex align-items-center position-relative overflow-hidden" style="min-height: 100vh; padding-top: 0;">
+        <!-- 
+        ===== VIDEO DE FONDO EXTENDIDO =====
+        GUÍA DE DESARROLLO: Este video cubre toda la pantalla incluyendo el área del navbar
+        - position: fixed para que el video permanezca fijo durante el scroll inicial
+        - top: 0 para comenzar desde la parte superior de la ventana (cubriendo navbar)
+        - z-index: -2 para estar detrás de todo el contenido pero visible a través del navbar transparente
+        - object-fit: cover mantiene las proporciones del video llenando toda el área
+        -->
+        <video autoplay muted loop class="position-fixed w-100" style="top: 0; left: 0; height: 100vh; object-fit: cover; z-index: -2;" id="heroVideo">
+            <source src="./assets/images/home-onlycomp.mp4" type="video/mp4">
+            <!-- Fallback gradient para navegadores que no soportan video -->
+            <div class="position-fixed top-0 start-0 w-100" style="height: 100vh; background: linear-gradient(135deg, #000000 0%, #1e3a8a 100%); z-index: -2;"></div>
+        </video>
+        
+        <!-- 
+        ===== OVERLAY PARA LEGIBILIDAD =====
+        GUÍA DE DESARROLLO: Overlay semitransparente para mejorar el contraste del texto
+        - position: fixed para cubrir toda la pantalla incluyendo navbar
+        - z-index: -1 para estar encima del video pero debajo del contenido
+        - background con alpha 0.4 para mantener visibilidad del video pero mejorar legibilidad
+        -->
+        <div class="position-fixed top-0 start-0 w-100" style="height: 100vh; background: rgba(0,0,0,0.4); z-index: -1;" id="heroOverlay"></div>
+        
+        <!-- 
+        ===== CONTENIDO PRINCIPAL HERO =====
+        GUÍA DE DESARROLLO:
+        
+        📐 ESTRUCTURA DE LAYOUT:
+        - container: Bootstrap container para responsive margins
+        - position-relative: Permite z-index positioning
+        - z-index: 2 para estar encima del video y overlay
+        
+        🎯 SISTEMA DE GRID:
+        - row justify-content-center: Centra el contenido horizontalmente
+        - text-center: Alineación central del texto
+        - col-lg-10: Ocupa 10/12 columnas en pantallas grandes para mejor legibilidad
+        
+        💡 MEJORES PRÁCTICAS:
+        - Contenido semánticamente estructurado (h1, h3, botones)
+        - Jerarquía visual clara con diferentes tamaños de fuente
+        - Spacing consistente con clases Bootstrap (mb-4, mt-5, etc.)
+        -->
+        <div class="container position-relative" style="z-index: 2; padding-top: 80px;">
+            <div class="row justify-content-center text-center">
+                <div class="col-lg-10">
+                    <!-- TÍTULO PRINCIPAL MÁS DESTACADO -->
+                    <h1 class="text-uppercase text-white fw-bold mb-4" style="font-size: 4.5rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); letter-spacing: 3px;">
+                        ONLY COMP
+                    </h1>
+                    
+                    <!-- SUBTÍTULO CON MEJOR CONTRASTE -->
+                    <h3 class="text-light mb-5 fw-semibold" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.8); max-width: 800px; margin: 0 auto;">
+                        Especialistas en Reparación • Equipos Remanufacturados • PCs Personalizados
+                    </h3>
+                    
+                    <!-- BOTONES DE ACCIÓN -->
+                    <div class="mt-5">
+                        <a href="#services" class="btn btn-outline-light btn-lg me-3 px-5 py-3 fw-semibold" style="border-width: 2px;">Ver Servicios</a>
+                        <a href="#contact" class="btn btn-light btn-lg ms-2 px-5 py-3 fw-semibold">Solicitar Presupuesto</a>
+                    </div>
+                    
+                    <!-- VITRINA DE PRODUCTOS -->
+                    <div class="mt-5 pt-4">
+                        <h5 class="text-white mb-4 fw-semibold">Productos Destacados</h5>
+                        <div class="row g-4 justify-content-center">
+                            <div class="col-xl-3 col-lg-6 col-md-6">
+                                <div class="product-showcase p-4 text-center" style="cursor: pointer; background: rgba(0,0,0,0.7); backdrop-filter: blur(15px); border-radius: 20px; transition: transform 0.3s ease, box-shadow 0.3s ease; border: 1px solid rgba(255,255,255,0.2);" onclick="scrollToSection('portfolio')">
+                                    <img src="https://images.unsplash.com/photo-1518118627599-2439d264fef7?w=80&h=80&fit=crop" alt="PCs Remanufacturadas" style="width: 80px; height: 80px; object-fit: cover; border-radius: 12px;" class="mb-3">
+                                    <h6 class="text-white fw-bold mb-2 small">PCs Remanufacturadas</h6>
+                                    <span class="badge bg-primary small px-3 py-1">Desde $45,000</span>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-lg-6 col-md-6">
+                                <div class="product-showcase p-4 text-center" style="cursor: pointer; background: rgba(0,0,0,0.7); backdrop-filter: blur(15px); border-radius: 20px; transition: transform 0.3s ease, box-shadow 0.3s ease; border: 1px solid rgba(255,255,255,0.2);" onclick="scrollToSection('portfolio')">
+                                    <img src="https://images.unsplash.com/photo-1593305841991-05c297ba4575?w=80&h=80&fit=crop" alt="PCs Gaming" style="width: 80px; height: 80px; object-fit: cover; border-radius: 12px;" class="mb-3">
+                                    <h6 class="text-white fw-bold mb-2 small">PCs Gaming</h6>
+                                    <span class="badge bg-success small px-3 py-1">Desde $120,000</span>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-lg-6 col-md-6">
+                                <div class="product-showcase p-4 text-center" style="cursor: pointer; background: rgba(0,0,0,0.7); backdrop-filter: blur(15px); border-radius: 20px; transition: transform 0.3s ease, box-shadow 0.3s ease; border: 1px solid rgba(255,255,255,0.2);" onclick="scrollToSection('portfolio')">
+                                    <img src="https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=80&h=80&fit=crop" alt="Monitores" style="width: 80px; height: 80px; object-fit: cover; border-radius: 12px;" class="mb-3">
+                                    <h6 class="text-white fw-bold mb-2 small">Monitores</h6>
+                                    <span class="badge bg-warning small px-3 py-1">Desde $25,000</span>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-lg-6 col-md-6">
+                                <div class="product-showcase p-4 text-center" style="cursor: pointer; background: rgba(0,0,0,0.7); backdrop-filter: blur(15px); border-radius: 20px; transition: transform 0.3s ease, box-shadow 0.3s ease; border: 1px solid rgba(255,255,255,0.2);" onclick="scrollToSection('portfolio')">
+                                    <img src="https://images.unsplash.com/photo-1580052614034-c55d20bfee3b?w=80&h=80&fit=crop" alt="Accesorios" style="width: 80px; height: 80px; object-fit: cover; border-radius: 12px;" class="mb-3">
+                                    <h6 class="text-white fw-bold mb-2 small">Accesorios</h6>
+                                    <span class="badge bg-info small px-3 py-1">Ver Catálogo</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+     <!-- 
+     ===== SECCIÓN PRODUCTOS =====
+     GUÍA DE DESARROLLO:
+     
+     🛍️ OBJETIVO: Mostrar catálogo de productos con diseño atractivo
+     📱 RESPONSIVE: Grid system Bootstrap para adaptabilidad
+     🎨 DISEÑO: Cards con overlay gradients para información
+     
+     📋 ESTRUCTURA TÉCNICA:
+     - section-padding: Clase custom para spacing consistente
+     - bg-light: Fondo claro para contraste con hero oscuro
+     - Grid 6 productos: 3 columnas en desktop, responsivo
+     
+     💡 MEJORES PRÁCTICAS IMPLEMENTADAS:
+     - Imágenes optimizadas con Unsplash
+     - Alt text descriptivo para SEO
+     - Height fijo para cards uniformes
+     - Badges con colores semánticos
+     -->
+    <section id="portfolio" class="section-padding bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <!-- Título de sección con elementos visuales -->
+                    <div class="section-title">
+                        <h1 class="display-4 fw-semibold">Nuestros Productos</h1>
+                        <div class="line"></div> <!-- Línea decorativa CSS -->
+                        <p>Descubre nuestra selección de equipos remanufacturados y PCs armados personalizados con la mejor relación calidad-precio</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row g-4 justify-content-center">
+                <div class="col-lg-4 col-md-6">
+                    <div class="product-card position-relative overflow-hidden rounded-3 shadow h-100">
+                        <img src="https://images.unsplash.com/photo-1518118627599-2439d264fef7?w=400&h=300&fit=crop&crop=center" alt="Computadoras remanufacturadas" class="img-fluid w-100" style="height: 280px; object-fit: cover;">
+                        <div class="product-overlay position-absolute bottom-0 start-0 w-100 p-4" style="background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);">
+                            <h4 class="text-white fw-bold mb-2">Computadoras Remanufacturadas</h4>
+                            <p class="text-light mb-3 small">Dell, HP, Lenovo con Intel i5/i7, 16GB RAM, SSD.</p>
+                            <span class="badge bg-primary fs-6 px-3 py-2">Desde $45,000</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="product-card position-relative overflow-hidden rounded-3 shadow h-100">
+                        <img src="https://images.unsplash.com/photo-1593305841991-05c297ba4575?w=400&h=300&fit=crop&crop=center" alt="PC Gaming RGB" class="img-fluid w-100" style="height: 280px; object-fit: cover;">
+                        <div class="product-overlay position-absolute bottom-0 start-0 w-100 p-4" style="background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);">
+                            <h4 class="text-white fw-bold mb-2">PCs Gaming</h4>
+                            <p class="text-light mb-3 small">Equipos personalizados para gaming de alto rendimiento.</p>
+                            <span class="badge bg-success fs-6 px-3 py-2">Desde $120,000</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="product-card position-relative overflow-hidden rounded-3 shadow h-100">
+                        <img src="https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=400&h=300&fit=crop&crop=center" alt="Monitores" class="img-fluid w-100" style="height: 280px; object-fit: cover;">
+                        <div class="product-overlay position-absolute bottom-0 start-0 w-100 p-4" style="background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);">
+                            <h4 class="text-white fw-bold mb-2">Monitores</h4>
+                            <p class="text-light mb-3 small">Monitores LED/LCD en óptimo estado, varias marcas.</p>
+                            <span class="badge bg-warning fs-6 px-3 py-2">Desde $25,000</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="product-card position-relative overflow-hidden rounded-3 shadow h-100">
+                        <img src="https://images.unsplash.com/photo-1580052614034-c55d20bfee3b?w=400&h=300&fit=crop&crop=center" alt="Accesorios PC" class="img-fluid w-100" style="height: 280px; object-fit: cover;">
+                        <div class="product-overlay position-absolute bottom-0 start-0 w-100 p-4" style="background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);">
+                            <h4 class="text-white fw-bold mb-2">Accesorios</h4>
+                            <p class="text-light mb-3 small">Teclados, mouse, auriculares y más accesorios.</p>
+                            <span class="badge bg-info fs-6 px-3 py-2">Ver Catálogo</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="product-card position-relative overflow-hidden rounded-3 shadow h-100">
+                        <img src="https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=400&h=300&fit=crop&crop=center" alt="Notebooks" class="img-fluid w-100" style="height: 280px; object-fit: cover;">
+                        <div class="product-overlay position-absolute bottom-0 start-0 w-100 p-4" style="background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);">
+                            <h4 class="text-white fw-bold mb-2">Notebooks</h4>
+                            <p class="text-light mb-3 small">Laptops remanufacturadas y nuevas para trabajo.</p>
+                            <span class="badge bg-secondary fs-6 px-3 py-2">Desde $80,000</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="product-card position-relative overflow-hidden rounded-3 shadow h-100">
+                        <img src="https://images.unsplash.com/photo-1625842268584-8f3296236761?w=400&h=300&fit=crop&crop=center" alt="Servidores" class="img-fluid w-100" style="height: 280px; object-fit: cover;">
+                        <div class="product-overlay position-absolute bottom-0 start-0 w-100 p-4" style="background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);">
+                            <h4 class="text-white fw-bold mb-2">Servidores</h4>
+                            <p class="text-light mb-3 small">Equipos empresariales y servidores refurbished.</p>
+                            <span class="badge bg-dark fs-6 px-3 py-2">Consultar</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+ <!-- 
+ ===== SECCIÓN SERVICIOS =====
+ GUÍA DE DESARROLLO:
+ 
+ 🔧 PROPÓSITO: Presentar servicios disponibles con iconografía
+ 🎯 UX DESIGN: Grid de 6 servicios con iconos Remix Icon
+ 📐 LAYOUT: 3 columnas desktop, 2 tablet, 1 móvil
+ 
+ 🛠️ COMPONENTES TÉCNICOS:
+ - RemixIcon CDN para iconografía consistente
+ - theme-shadow: Clase custom para sombras uniformes
+ - Grid responsive con breakpoints Bootstrap
+ 
+ 💼 ESTRATEGIA DE CONTENIDO:
+ - Títulos descriptivos y concisos
+ - Descripciones orientadas a beneficios
+ - Iconos semánticamente relevantes
+ - Estructura SEO-friendly con headings
+ -->
+ <section id="services" class="section-padding bg-white">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <!-- Header de sección con elementos visuales -->
+                    <div class="section-title">
+                        <h1 class="display-4 fw-semibold">Nuestros Servicios</h1>
+                        <div class="line"></div> <!-- Elemento decorativo CSS -->
+                        <p>Ofrecemos servicios integrales de informática con la mejor calidad y garantía del mercado</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row g-4 text-center">
+                <div class="col-lg-4 col-sm-6">
+                    <div class="service theme-shadow p-lg-5 p-4">
+                        <div class="iconbox">
+                            <i class="ri-computer-fill"></i>
+                        </div>
+                        <h5 class="mt-4 mb-3">Reparación de PCs</h5>
+                        <p>Diagnóstico y reparación completa de computadoras de escritorio y laptops con garantía de 6 meses.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-sm-6">
+                    <div class="service theme-shadow p-lg-5 p-4">
+                        <div class="iconbox">
+                            <i class="ri-tv-2-fill"></i>
+                        </div>
+                        <h5 class="mt-4 mb-3">Reparación de Monitores</h5>
+                        <p>Servicio especializado en reparación de monitores LCD, LED y gaming. Diagnóstico gratuito.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-sm-6">
+                    <div class="service theme-shadow p-lg-5 p-4">
+                        <div class="iconbox">
+                            <i class="ri-recycle-fill"></i>
+                        </div>
+                        <h5 class="mt-4 mb-3">Equipos Remanufacturados</h5>
+                        <p>PCs y laptops reacondicionados con garantía. Perfectos para oficina, estudio y uso doméstico.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-sm-6">
+                    <div class="service theme-shadow p-lg-5 p-4">
+                        <div class="iconbox">
+                            <i class="ri-settings-3-fill"></i>
+                        </div>
+                        <h5 class="mt-4 mb-3">Armado de PCs</h5>
+                        <p>PCs nuevos armados bajo pedido según tus necesidades: gaming, oficina, diseño o workstations.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-sm-6">
+                    <div class="service theme-shadow p-lg-5 p-4">
+                        <div class="iconbox">
+                            <i class="ri-tools-fill"></i>
+                        </div>
+                        <h5 class="mt-4 mb-3">Mantenimiento</h5>
+                        <p>Servicio de mantenimiento preventivo y correctivo para empresas y particulares.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-sm-6">
+                    <div class="service theme-shadow p-lg-5 p-4">
+                        <div class="iconbox">
+                            <i class="ri-update-fill"></i>
+                        </div>
+                        <h5 class="mt-4 mb-3">Upgrades</h5>
+                        <p>Actualizaciones de hardware: memoria RAM, discos SSD, tarjetas gráficas y procesadores.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- ABOUT -->
+    <section id="about" class="section-padding bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <div class="section-title">
+                        <h1 class="display-4 fw-semibold">Sobre Nosotros</h1>
+                        <div class="line"></div>
+                        <p>Somos especialistas en informática con más de 10 años de experiencia en reparación, venta de equipos remanufacturados y armado de PCs personalizados</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-between align-items-center">
+                <div class="col-lg-6">
+                    <div class="about-image">
+                        <img src="https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=600&h=400&fit=crop&crop=center" alt="Taller de reparación de computadoras" class="img-fluid rounded-3 shadow">
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <h1>OutletTech</h1>
+                    <p class="mt-3 mb-4">Tu taller informático de confianza. Ofrecemos soluciones completas en tecnología con garantía y el mejor servicio al cliente.</p>
+                    <div class="d-flex pt-4 mb-3">
+                        <div class="iconbox me-4">
+                            <i class="ri-tools-fill"></i>
+                        </div>
+                        <div>
+                            <h5>Reparación Especializada</h5>
+                            <p>Diagnóstico y reparación de computadoras, laptops y monitores con garantía de 6 meses.</p>
+                        </div>
+                    </div>
+                    <div class="d-flex mb-3">
+                        <div class="iconbox me-4">
+                            <i class="ri-recycle-fill"></i>
+                        </div>
+                        <div>
+                            <h5>Equipos Remanufacturados</h5>
+                            <p>PCs y laptops reacondicionados con garantía, perfectos para oficina y uso doméstico.</p>
+                        </div>
+                    </div>
+                    <div class="d-flex">
+                        <div class="iconbox me-4">
+                            <i class="ri-settings-3-fill"></i>
+                        </div>
+                        <div>
+                            <h5>Armado Personalizado</h5>
+                            <p>PCs nuevos armados bajo pedido para gaming, trabajo profesional y oficinas.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+   
+
+
+
+    <!-- 
+    ===== SECCIÓN CONTACTO SEGURO =====
+    GUÍA DE DESARROLLO:
+    
+    📞 OBJETIVO: Formulario de contacto con sistema de seguridad
+    🛡️ SEGURIDAD: Honeypot, CSRF token, rate limiting
+    🎨 DISEÑO: Gradient background con formulario + info panel
+    
+    🔒 CARACTERÍSTICAS DE SEGURIDAD:
+    - Campo honeypot invisible para detectar bots
+    - Token CSRF generado dinámicamente
+    - Validación client-side y server-side
+    - Rate limiting en envíos
+    
+    📍 INTEGRACIÓN DE MAPA:
+    - Leaflet.js para mapa interactivo
+    - Coordenadas ofuscadas por seguridad
+    - Fallback para JavaScript deshabilitado
+    
+    📱 RESPONSIVE DESIGN:
+    - 2 columnas desktop: formulario + info
+    - 1 columna móvil: stack vertical
+    - Formulario ocupa 8/12 columnas para mejor UX
+    -->
+    <section class="section-padding" id="contact" style="background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <!-- Header de sección con tema oscuro -->
+                    <div class="section-title">
+                        <h1 class="display-4 text-white fw-semibold">Contáctanos</h1>
+                        <div class="line bg-white"></div> <!-- Línea blanca para contraste -->
+                        <p class="text-light">¿Necesitas reparar tu PC, buscar equipos remanufacturados o armar una máquina personalizada? ¡Estamos aquí para ayudarte!</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <!-- FORMULARIO DE CONTACTO -->
+                <div class="col-lg-8">
+                    <form id="contactForm" action="enviar.php" method="POST" class="contact-form-section p-lg-5 p-4 h-100">
+                        <div class="text-center mb-4">
+                            <h3 class="text-dark mb-2">Solicita tu Presupuesto</h3>
+                            <p class="text-muted">Completa el formulario y nos pondremos en contacto contigo</p>
+                        </div>
+                        
+                        <!-- Campo honeypot (oculto para bots) -->
+                        <input type="text" name="website" style="display:none;" tabindex="-1" autocomplete="off">
+                        
+                        <!-- Token CSRF -->
+                        <input type="hidden" name="form_token" id="form_token" value="">
+                        
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <label for="nombre" class="form-label fw-semibold">Nombre Completo *</label>
+                                <input type="text" id="nombre" name="nombre" class="form-control form-control-lg" placeholder="Tu nombre completo" required minlength="2" maxlength="100">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="email" class="form-label fw-semibold">Email *</label>
+                                <input type="email" id="email" name="email" class="form-control form-control-lg" placeholder="tu@email.com" required maxlength="100">
+                            </div>
+                            <div class="col-12">
+                                <label for="mensaje" class="form-label fw-semibold">Descripción del Mensaje *</label>
+                                <textarea id="mensaje" name="mensaje" rows="5" class="form-control" placeholder="Describe tu consulta: ¿Necesitas reparación? ¿Buscas un equipo específico? ¿Quieres armar una PC personalizada? Cuéntanos todos los detalles..." required minlength="10" maxlength="1000"></textarea>
+                            </div>
+                            <div class="col-12 d-grid">
+                                <button type="submit" class="btn btn-primary btn-lg py-3" id="submitBtn">
+                                    <i class="ri-send-plane-fill me-2"></i>
+                                    <span class="btn-text">Enviar Consulta</span>
+                                    <span class="spinner-border spinner-border-sm d-none" role="status"></span>
+                                </button>
+                            </div>
+                            <div class="col-12">
+                                <div id="formMessage" class="alert d-none" role="alert"></div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- INFORMACIÓN DE CONTACTO -->
+                <!-- 
+                ===== GUÍA: SECCIÓN DE CONTACTO CON SEGURIDAD =====
+                Esta sección implementa:
+                1. Mini mapa interactivo con coordenadas ofuscadas
+                2. Información protegida con técnicas de ofuscación
+                3. Sistema de contacto seguro sin exposición directa de datos
+                -->
+                <div class="col-lg-4">
+                    <div class="contact-info-section p-4 h-100">
+                        <h4 class="text-white fw-bold mb-4">Información de Contacto</h4>
+                        
+                        <!-- DIRECCIÓN PÚBLICA - Solo área general -->
+                        <div class="contact-item d-flex align-items-start mb-4">
+                            <div class="contact-icon me-3">
+                                <i class="ri-map-pin-line"></i>
+                            </div>
+                            <div class="contact-details">
+                                <h6 class="text-white fw-semibold mb-1">Área de Servicio</h6>
+                                <!-- SEGURIDAD: Solo mostramos zona general, no dirección exacta -->
+                                <p class="text-light mb-0 small">Aldo Bonzi, La Matanza, Buenos Aires</p>
+                            </div>
+                        </div>
+
+                        <!-- MINI MAPA INTERACTIVO -->
+                        <!-- 
+                        GUÍA: Este mapa usa coordenadas aproximadas por seguridad
+                        - No muestra ubicación exacta del negocio
+                        - Usa OpenStreetMap para evitar dependencias de Google
+                        - Implementa lazy loading para mejor performance
+                        -->
+                        <div class="contact-item mb-4">
+                            <div class="mini-map-container">
+                                <h6 class="text-white fw-semibold mb-2">
+                                    <i class="ri-map-2-line me-2"></i>
+                                    Zona de Servicio
+                                </h6>
+                                <!-- Contenedor del mapa con coordenadas ofuscadas -->
+                                <div id="contact-map" class="mini-map" 
+                                     data-lat="-34.7078" 
+                                     data-lng="-58.5181" 
+                                     data-zoom="16">
+                                    <!-- Fallback para cuando JS está deshabilitado -->
+                                    <div class="map-fallback">
+                                        <i class="ri-map-pin-line"></i>
+                                        <p class="text-light small mb-0">Aldo Bonzi, Buenos Aires</p>
+                                        <small class="text-muted">Habilita JavaScript para ver el mapa</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- HORARIOS DE ATENCIÓN -->
+                        <div class="contact-item d-flex align-items-start mb-4">
+                            <div class="contact-icon me-3">
+                                <i class="ri-time-line"></i>
+                            </div>
+                            <div class="contact-details">
+                                <h6 class="text-white fw-semibold mb-1">Horarios de Atención</h6>
+                                <p class="text-light mb-1 small">Lunes a Viernes: 9:00 - 18:00 hs</p>
+                                <p class="text-light mb-0 small">Sábados: 9:00 - 14:00 hs</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <div class="text-center">
+                                <i class="ri-tools-line text-primary fs-1 mb-3"></i>
+                                <h6 class="text-white fw-semibold mb-2">Servicio Profesional</h6>
+                                <p class="text-light small mb-0">Diagnóstico gratuito • Garantía 6 meses • Presupuesto sin compromiso</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DIVIDER LINE -->
+    <!-- TRAINEE NOTE: Línea divisoria simple entre contacto y footer -->
+    <div class="border-top border-light" style="border-width: 2px !important;"></div>
+
+    <!-- 
+    ===== FOOTER PROFESIONAL =====
+    GUÍA DE DESARROLLO:
+    
+    🏢 PROPÓSITO: Información corporativa y enlaces útiles
+    📋 ESTRUCTURA: 2 columnas - info empresa + servicios
+    🔗 NAVEGACIÓN: Links internos para mejor UX
+    
+    🎨 DISEÑO TÉCNICO:
+    - bg-dark: Fondo oscuro para contraste
+    - gy-5: Gutters verticales Bootstrap
+    - justify-content-between: Distribución equilibrada
+    
+    🛡️ ELEMENTOS DE SEGURIDAD:
+    - Notificación de contacto seguro
+    - Iconografía de seguridad (shield)
+    - Links internos sin exposición de datos
+    
+    📱 RESPONSIVE:
+    - col-lg-6: 50% en desktop
+    - col-md-8: 66% en tablets
+    - Stack en móviles
+    -->
+    <footer class="bg-dark">
+        <div class="footer-top">
+            <div class="container">
+                <!-- Grid de 2 columnas con espaciado vertical -->
+                <div class="row gy-5 justify-content-between">
+                    <!-- Columna de información corporativa -->
+                    <div class="col-lg-6 col-md-8">
+                        <h3 class="text-white fw-bold mb-3">Outlet Tech</h3>
+                        <div class="line"></div> <!-- Elemento decorativo -->
+                        <p class="text-light mb-4">Tu taller informático de confianza en Buenos Aires. Reparación, equipos remanufacturados y PCs a medida con garantía.</p>
+                        <!-- Notificación de seguridad -->
+                        <div class="security-notice">
+                            <small class="text-muted">
+                                <i class="ri-shield-line me-1"></i> <!-- Icono de seguridad -->
+                                Contacto seguro disponible mediante formulario y WhatsApp protegido
+                            </small>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4">
+                        <h5 class="mb-3 text-white">SERVICIOS</h5>
+                        <div class="line"></div>
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><a href="#services" class="text-light text-decoration-none hover-link">Reparación de PCs</a></li>
+                            <li class="mb-2"><a href="#services" class="text-light text-decoration-none hover-link">Reparación de Monitores</a></li>
+                            <li class="mb-2"><a href="#services" class="text-light text-decoration-none hover-link">Equipos Remanufacturados</a></li>
+                            <li class="mb-2"><a href="#services" class="text-light text-decoration-none hover-link">Armado de PCs</a></li>
+                            <li class="mb-2"><a href="#services" class="text-light text-decoration-none hover-link">Soporte Técnico</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <div class="row g-4 justify-content-center">
+                    <div class="col-auto">
+                        <p class="mb-0 text-light">© 2025 Outlet Tech Argentina. Todos los derechos reservados.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+
+
+
+    <!-- 
+    ===== BOTÓN FLOTANTE WHATSAPP PROTEGIDO =====
+    GUÍA: Este botón ya no contiene el número directamente por seguridad
+    El número se obtiene a través del sistema de seguridad después de verificación
+    -->
+    <a href="#" class="whatsapp-float" id="secure-whatsapp-float" aria-label="Contactar por WhatsApp">
+        <i class="ri-whatsapp-fill"></i>
+        <!-- Indicador de seguridad (opcional) -->
+        <span class="security-badge">
+            <i class="ri-shield-check-line"></i>
+        </span>
+    </a>
+
+    <!-- 
+    ===== SCRIPTS DE TERCEROS =====
+    GUÍA: Cargamos librerías externas primero para dependencias
+    -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <!-- SCRIPT PARA NAVEGACIÓN FUNCIONAL Y ANIMACIONES GSAP -->
+    <script>
+        // Registrar plugins de GSAP
+        gsap.registerPlugin(ScrollTrigger);
+        
+        // Función para scroll suave sin dependencias externas
+        function scrollToSection(sectionId) {
+            const element = document.getElementById(sectionId);
+            if (element) {
+                const offsetTop = element.offsetTop - 70;
+                // Usar scrollTo nativo del navegador con animación GSAP
+                gsap.to(window, {
+                    duration: 1.2,
+                    scrollTo: offsetTop,
+                    ease: "power3.inOut"
+                });
+            }
+        }
+        
+        // Esperar a que cargue todo
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🎯 Initializing navbar and GSAP animations');
+            
+            /* 
+            ===== SISTEMA DE DETECCIÓN DE NAVEGACIÓN MEJORADO =====
+            GUÍA DE DESARROLLO JAVASCRIPT:
+            
+            🎯 OBJETIVO: Transiciones suaves del navbar sin flash ni glitches
+            📊 TRIGGER: Scroll fuera del hero OR navegación activa
+            🔧 MÉTODO: IntersectionObserver + navegación tracking + transiciones optimizadas
+            
+            💡 OPTIMIZACIONES IMPLEMENTADAS:
+            - Preload class para evitar flash inicial
+            - RequestAnimationFrame para sincronización
+            - Debouncing para transiciones suaves
+            - GPU acceleration con will-change
+            */
+            
+            // PRELOAD OPTIMIZATION - Prevenir flash de transiciones
+            const navbar = document.getElementById('mainNavbar');
+            const heroSection = document.getElementById('hero');
+            let isOutsideHero = false;
+            let hasNavigated = false;
+            let transitionDebouncer = null;
+            
+            // Aplicar clase preload temporalmente
+            navbar.classList.add('navbar-preload');
+            
+            // Remover preload después de la inicialización
+            setTimeout(() => {
+                navbar.classList.remove('navbar-preload');
+            }, 100);
+            
+            // Función optimizada para transiciones suaves del navbar
+            function updateNavbarBackground() {
+                if (!navbar) return;
+                
+                // Cancelar transición anterior si existe
+                if (transitionDebouncer) {
+                    clearTimeout(transitionDebouncer);
+                }
+                
+                // Usar requestAnimationFrame para sincronización suave
+                requestAnimationFrame(() => {
+                    transitionDebouncer = setTimeout(() => {
+                        if (isOutsideHero || hasNavigated) {
+                            if (!navbar.classList.contains('navbar-scrolled')) {
+                                navbar.classList.add('navbar-scrolled');
+                                console.log('🎨 Navbar background: ACTIVATED');
+                            }
+                        } else {
+                            if (navbar.classList.contains('navbar-scrolled')) {
+                                navbar.classList.remove('navbar-scrolled');
+                                console.log('🎨 Navbar background: TRANSPARENT');
+                            }
+                        }
+                    }, 10); // Debounce suave de 10ms
+                });
+            }
+            
+            // Observer para detectar cuando salimos del hero
+            const heroObserver = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    // Si el hero NO está visible, activamos el fondo
+                    isOutsideHero = !entry.isIntersecting;
+                    updateNavbarBackground();
+                });
+            }, {
+                threshold: 0.1, // Activar cuando el 10% del hero sea visible
+                rootMargin: '-70px 0px 0px 0px' // Compensar altura del navbar
+            });
+            
+            // Observar el hero section
+            heroObserver.observe(heroSection);
+            
+            // Backup: detección por scroll tradicional
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 100) {
+                    isOutsideHero = true;
+                    updateNavbarBackground();
+                }
+            });
+            
+            // ANIMACIONES DE ENTRADA - HERO SECTION
+            gsap.from(".navbar", {duration: 1, y: -100, ease: "bounce.out"});
+            gsap.from("#hero h1", {duration: 1.5, opacity: 0, y: 50, delay: 0.5});
+            gsap.from("#hero h3", {duration: 1.5, opacity: 0, y: 30, delay: 0.8});
+            gsap.from("#hero .btn", {duration: 1, opacity: 0, scale: 0.8, delay: 1.2, stagger: 0.2});
+            gsap.from(".product-showcase", {duration: 0.8, opacity: 0, y: 30, delay: 1.5, stagger: 0.1});
+            
+            /* 
+            ===== SISTEMA DE ANIMACIONES GSAP =====
+            GUÍA TÉCNICA AVANZADA:
+            
+            🎬 FILOSOFÍA DE ANIMACIÓN:
+            - Animaciones sutiles y profesionales
+            - Triggered por scroll para mejor performance
+            - Stagger effects para elementos múltiples
+            - Easing curves naturales (power2.out)
+            
+            ⚡ OPTIMIZACIONES DE PERFORMANCE:
+            - ScrollTrigger para lazy loading de animaciones
+            - GPU acceleration con transform properties
+            - Duraciones optimizadas (0.8-1.5s)
+            - Stagger para evitar bloque visual
+            
+            🎯 TARGETS DE ANIMACIÓN:
+            - Títulos: fade-in desde abajo (y: 50)
+            - Cards/elementos: stagger con delays
+            - Imágenes: slide desde los lados
+            - Textos: fade-in progresivo
+            */
+            
+            // ANIMACIONES SCROLL-TRIGGERED PARA TODAS LAS SECCIONES
+            
+            // PRODUCTS SECTION - Animaciones de entrada
+            gsap.from("#portfolio .section-title", {
+                scrollTrigger: "#portfolio", // Trigger cuando la sección entra en vista
+                duration: 1, // 1 segundo de duración
+                opacity: 0, // Comienza invisible
+                y: 50, // Desliza desde 50px abajo
+                ease: "power2.out" // Curva de easing natural
+            });
+            gsap.from("#portfolio .product-card", {
+                scrollTrigger: "#portfolio",
+                duration: 0.8,
+                opacity: 0,
+                y: 50,
+                stagger: 0.2,
+                delay: 0.3,
+                ease: "power2.out"
+            });
+            
+            // SERVICES SECTION
+            gsap.from("#services .section-title", {
+                scrollTrigger: "#services",
+                duration: 1,
+                opacity: 0,
+                y: 50,
+                ease: "power2.out"
+            });
+            gsap.from("#services .service", {
+                scrollTrigger: "#services",
+                duration: 0.8,
+                opacity: 0,
+                y: 50,
+                stagger: 0.15,
+                delay: 0.3,
+                ease: "power2.out"
+            });
+            
+            // ABOUT SECTION
+            gsap.from("#about .section-title", {
+                scrollTrigger: "#about",
+                duration: 1,
+                opacity: 0,
+                y: 50,
+                ease: "power2.out"
+            });
+            gsap.from("#about .about-image", {
+                scrollTrigger: "#about",
+                duration: 1,
+                opacity: 0,
+                x: -100,
+                delay: 0.3,
+                ease: "power2.out"
+            });
+            gsap.from("#about h1, #about p, #about .d-flex", {
+                scrollTrigger: "#about",
+                duration: 0.8,
+                opacity: 0,
+                x: 100,
+                stagger: 0.2,
+                delay: 0.5,
+                ease: "power2.out"
+            });
+            
+            // CONTACT SECTION
+            gsap.from("#contact .section-title", {
+                scrollTrigger: "#contact",
+                duration: 1,
+                opacity: 0,
+                y: 50,
+                ease: "power2.out"
+            });
+            gsap.from("#contact .contact-form-section", {
+                scrollTrigger: "#contact",
+                duration: 1,
+                opacity: 0,
+                x: -50,
+                delay: 0.3,
+                ease: "power2.out"
+            });
+            gsap.from("#contact .contact-info-section", {
+                scrollTrigger: "#contact",
+                duration: 1,
+                opacity: 0,
+                x: 50,
+                delay: 0.5,
+                ease: "power2.out"
+            });
+            
+            // NAVEGACIÓN FUNCIONAL CON TRANSICIONES OPTIMIZADAS
+            const allNavLinks = document.querySelectorAll('a[href^="#"]');
+            
+            allNavLinks.forEach(function(link) {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetElement = document.getElementById(targetId);
+                    console.log('🔗 Navigating to:', targetId);
+                    
+                    if (targetElement) {
+                        // Optimización de navegación con debounce
+                        if (transitionDebouncer) clearTimeout(transitionDebouncer);
+                        
+                        // Marcar navegación para activar fondo navbar
+                        if (targetId !== 'hero') {
+                            hasNavigated = true;
+                            updateNavbarBackground();
+                        } else {
+                            hasNavigated = false;
+                            updateNavbarBackground();
+                        }
+                        
+                        // Cerrar menú móvil si está abierto
+                        const navbarCollapse = document.getElementById('navbarNav');
+                        if (navbarCollapse && navbarCollapse.classList.contains('show')) {
+                            const bsCollapse = new bootstrap.Collapse(navbarCollapse);
+                            bsCollapse.hide();
+                        }
+                        
+                        // Método alternativo: smooth scroll nativo del navegador
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start',
+                            inline: 'nearest'
+                        });
+                        
+                        // Ajustar offset después del scroll
+                        setTimeout(() => {
+                            window.scrollBy(0, -70);
+                        }, 500);
+                        
+                        // Actualizar navegación activa
+                        updateActiveNavigation(targetId);
+                    }
+                });
+            });
+            
+            // Función para actualizar navegación activa
+            function updateActiveNavigation(activeSection) {
+                document.querySelectorAll('.nav-link').forEach(function(link) {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === '#' + activeSection) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+            
+            // Scroll spy con IntersectionObserver (más eficiente) + navbar background control
+            const sections = document.querySelectorAll('section[id]');
+            const observerOptions = {
+                threshold: 0.3,
+                rootMargin: '-70px 0px -70px 0px'
+            };
+            
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        const currentSection = entry.target.id;
+                        updateActiveNavigation(currentSection);
+                        
+                        // Control de fondo navbar basado en la sección activa
+                        if (currentSection === 'hero') {
+                            // En hero, solo activar fondo si hemos navegado manualmente
+                            if (!hasNavigated) {
+                                isOutsideHero = false;
+                            }
+                        } else {
+                            // En cualquier otra sección, activar fondo
+                            isOutsideHero = true;
+                            hasNavigated = true;
+                        }
+                        updateNavbarBackground();
+                    }
+                });
+            }, observerOptions);
+            
+            sections.forEach(function(section) {
+                observer.observe(section);
+            });
+            
+            // GSAP hover animations para vitrina de productos
+            document.querySelectorAll('.product-showcase').forEach(function(item) {
+                item.addEventListener('mouseenter', function() {
+                    gsap.to(this, {duration: 0.3, y: -10, scale: 1.05, ease: "power2.out"});
+                });
+                item.addEventListener('mouseleave', function() {
+                    gsap.to(this, {duration: 0.3, y: 0, scale: 1, ease: "power2.out"});
+                });
+            });
+        });
+    </script>
+    
+    <script src="./assets/js/security.js"></script>
+</body>
+
+</html>

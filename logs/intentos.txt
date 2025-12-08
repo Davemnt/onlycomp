@@ -1,0 +1,2 @@
+# Logs del formulario de contacto
+# Este archivo registra intentos de envío y errores
