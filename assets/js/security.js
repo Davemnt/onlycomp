@@ -551,7 +551,9 @@ class OutletTechSecurity {
 
 // GUÍA: Inicializar el sistema de seguridad cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', () => {
-    window.OutletTechSecuritySystem = new OutletTechSecurity();
+    if (!window.OutletTechSecuritySystem) {
+        window.OutletTechSecuritySystem = new OutletTechSecurity();
+    }
 });
 
 // GUÍA: Protección adicional - Ofuscar código en producción

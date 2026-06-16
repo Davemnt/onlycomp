@@ -1,0 +1,271 @@
+/**
+ * ===== OUTLETTECH - ESTILOS DE NAVEGACIÓN =====
+ * 
+ * Sistema completo de navegación con transiciones optimizadas
+ */
+
+/* ===== SCROLL BEHAVIOR GLOBAL ===== */
+html {
+    scroll-behavior: smooth;
+}
+
+/* ===== SISTEMA DE NAVBAR TRANSPARENTE ===== */
+/* 
+GUÍA DE DESARROLLO CSS:
+
+🎨 FILOSOFÍA DE DISEÑO:
+- Estado inicial: Transparente para mostrar video de fondo
+- Estado scroll: Fondo sólido para legibilidad durante navegación
+- Transiciones suaves para experiencia fluida
+
+📝 TÉCNICAS IMPLEMENTADAS:
+1. RGBA colors para transparencias controladas
+2. text-shadow para legibilidad sobre video
+3. backdrop-filter para efectos glassmorphism
+4. transform para micro-interacciones
+*/
+
+/* ===== NAVBAR ===== */
+.navbar,
+#mainNavbar {
+    will-change: background-color, backdrop-filter;
+    transform: translateZ(0);
+}
+
+/* Asegurar fondo siempre presente */
+.navbar-scrolled {
+    background: rgba(33, 37, 41, 0.95) !important;
+}
+
+/* ===== ANIMACIONES Y TRANSICIONES SUAVES ===== */
+
+/* Animación de fade in para elementos */
+.fade-in {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), 
+                transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Delays escalonados para efecto cascada más largo */
+.fade-in:nth-child(1) { transition-delay: 0.05s; }
+.fade-in:nth-child(2) { transition-delay: 0.15s; }
+.fade-in:nth-child(3) { transition-delay: 0.25s; }
+.fade-in:nth-child(4) { transition-delay: 0.35s; }
+.fade-in:nth-child(5) { transition-delay: 0.45s; }
+.fade-in:nth-child(6) { transition-delay: 0.55s; }
+.fade-in:nth-child(7) { transition-delay: 0.65s; }
+.fade-in:nth-child(8) { transition-delay: 0.75s; }
+
+/* Transiciones suaves en navegación */
+.navbar-nav .nav-link {
+    position: relative;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.navbar-nav .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 2px;
+    background: #60a5fa;
+    border-radius: 2px;
+    transition: width 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover::after,
+.navbar-nav .nav-link.active::after {
+    width: 60%;
+}
+
+/* Animación suave en botones */
+.btn {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s ease, height 0.6s ease;
+}
+
+.btn:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+/* Transiciones en tarjetas de productos */
+.product-card,
+.product-showcase {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.product-card:hover,
+.product-showcase:hover {
+    transform: translateY(-10px) scale(1.03);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* Transición suave en overlay de productos */
+.product-overlay {
+    transition: all 0.4s ease;
+}
+
+.product-card:hover .product-overlay {
+    background: linear-gradient(to top, rgba(0,0,0,0.95), rgba(0,0,0,0.3));
+}
+
+/* Transiciones en servicios */
+.service {
+    transition: all 0.3s ease;
+}
+
+.service:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(255, 140, 0, 0.2);
+}
+
+/* Smooth scroll para toda la página */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Transición en inputs del formulario */
+input, textarea, select {
+    transition: all 0.3s ease;
+}
+
+input:focus, textarea:focus, select:focus {
+    transform: scale(1.02);
+    box-shadow: 0 0 0 3px rgba(255, 140, 0, 0.1);
+}
+
+/* Estado inicial del navbar - nav-links blancos */
+.navbar-nav .nav-link {
+    color: rgba(255,255,255,0.9) !important;
+    font-weight: 600;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+    transition: color 0.2s ease, transform 0.2s ease, text-shadow 0.2s ease;
+    will-change: color, transform;
+    border-radius: 8px;
+    padding: 8px 16px !important;
+    margin: 0 4px;
+    /* background removido */
+}
+
+/* Efectos hover optimizados */
+.navbar-nav .nav-link:hover {
+    color: #fff !important;
+    /* background removido */
+    text-shadow: 2px 2px 6px rgba(0,0,0,0.9);
+    transform: translateY(-2px);
+}
+
+/* Estado activo */
+.navbar-nav .nav-link.active {
+    color: #60a5fa !important;
+    font-weight: 700;
+    text-shadow: none;
+}
+
+/* Logo optimizado */
+.navbar-brand {
+    color: #fff !important;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+    transition: color 0.2s ease;
+}
+
+/* Botón optimizado */
+.btn-outline-light {
+    border-color: rgba(255,255,255,0.8);
+    color: rgba(255,255,255,0.9);
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    transition: all 0.2s ease;
+}
+
+/* ===== ESTADO NAVBAR CON SCROLL ===== */
+/* ACTIVADO POR: IntersectionObserver + navegación tracking */
+/* TRIGGER: Salida del hero OR navegación manual */
+.navbar-scrolled {
+    background: rgba(8, 13, 26, 0.96) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 1px 0 rgba(255,255,255,0.06);
+}
+
+/* ===== TRANSICIONES OPTIMIZADAS ===== */
+#mainNavbar {
+    transition: background-color 0.4s ease, backdrop-filter 0.4s ease, box-shadow 0.4s ease !important;
+    will-change: background-color, backdrop-filter;
+    transform: translateZ(0); /* Force hardware acceleration */
+}
+
+/* Preload optimizado */
+.navbar-preload {
+    transition: none !important;
+}
+
+/* Optimización para animaciones suaves */
+* {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Offset para compensar navbar fijo — usado por scrollIntoView */
+section {
+    scroll-margin-top: 80px;
+}
+
+/* ===== ESTILOS PARA VITRINA DE PRODUCTOS ===== */
+.product-showcase:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 25px 50px rgba(0,0,0,0.4);
+    border-color: rgba(255,255,255,0.4) !important;
+}
+
+.showcase-image {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+/* ===== MEJORAS PARA MENÚ HAMBURGUESA ===== */
+.navbar-toggler {
+    padding: 8px 12px;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(5px);
+    transition: all 0.3s ease;
+}
+
+.navbar-toggler:hover {
+    background: rgba(255,255,255,0.2);
+    transform: scale(1.1);
+}
+
+.navbar-toggler:focus {
+    box-shadow: 0 0 0 3px rgba(255,193,7,0.5);
+}
+
+/* Asegurar que el icono hamburguesa sea siempre blanco */
+.navbar-toggler-icon {
+    filter: invert(1) !important;
+}

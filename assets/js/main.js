@@ -6,13 +6,26 @@
  * Complementa el sistema de animaciones personalizado
  */
 
+// Inicialización optimizada
 document.addEventListener('DOMContentLoaded', function() {
-    // Inicializar funcionalidades principales
-    initNavigation();
-    initSmoothScroll();
-    initFormValidation();
+    // Usar requestIdleCallback para inicializaciones no críticas
+    if (window.requestIdleCallback) {
+        requestIdleCallback(() => {
+            initNavigation();
+            initFormValidation();
+        });
+        // Inicializar scroll inmediatamente (más crítico)
+        initSmoothScroll();
+    } else {
+        // Fallback para navegadores sin requestIdleCallback
+        setTimeout(() => {
+            initNavigation();
+            initSmoothScroll();
+            initFormValidation();
+        }, 0);
+    }
     
-    console.log('🎯 OutletTech Main System initialized');
+    console.log('🎯 OutletTech Main System initialized (optimized)');
 });
 
 // ===== NAVEGACIÓN INTELIGENTE =====
@@ -21,8 +34,10 @@ function initNavigation() {
     const navLinks = document.querySelectorAll('.nav-link');
     const sections = document.querySelectorAll('section[id]');
     
-    // Navbar scroll effect
-    window.addEventListener('scroll', () => {
+    // Navbar scroll effect optimizado
+    let scrollTicking = false;
+    
+    function updateNavbarOnScroll() {
         if (window.scrollY > 50) {
             navbar.style.backgroundColor = 'rgba(33, 37, 41, 0.95)';
             navbar.style.backdropFilter = 'blur(10px)';
@@ -31,9 +46,16 @@ function initNavigation() {
             navbar.style.backdropFilter = 'none';
         }
         
-        // Active section highlighting
         updateActiveNavLink();
-    });
+        scrollTicking = false;
+    }
+    
+    window.addEventListener('scroll', () => {
+        if (!scrollTicking) {
+            requestAnimationFrame(updateNavbarOnScroll);
+            scrollTicking = true;
+        }
+    }, { passive: true });
     
     // Click handler for nav links
     navLinks.forEach(link => {

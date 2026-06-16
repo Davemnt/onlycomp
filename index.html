@@ -1,297 +1,671 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="es">
-
 <head>
-    <!-- ===== META TAGS ESENCIALES ===== -->
-    <!-- Codificación de caracteres UTF-8 para soporte completo de caracteres -->
     <meta charset="utf-8">
-    <!-- Viewport responsive para dispositivos móviles -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    
-    <!-- ===== SEO BÁSICO ===== -->
-    <title>OutletTech - Reparación, Equipos Remanufacturados y PC a Medida</title>
-    <meta name="description" content="OutletTech: Especialistas en reparación de PCs, venta de equipos remanufacturados y armado de computadoras personalizadas en Buenos Aires.">
-    <meta name="keywords" content="reparación PC, equipos remanufacturados, armado PC, servicio técnico, Buenos Aires">
-    <meta name="author" content="OutletTech">
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💻</text></svg>">
-    
-    <!-- ===== CDN LIBRARIES (TRAINEE: Usar siempre versiones específicas en producción) ===== -->
-    <!-- Bootstrap 5.2.0 - Framework CSS responsive -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css">
-    <!-- RemixIcon - Librería de iconos moderna -->
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
-    <!-- Fancybox - Para lightbox de imágenes -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.css">
-    
-    <!-- ===== ESTILOS PERSONALIZADOS (TRAINEE: Siempre cargar CSS personalizado al final) ===== -->
+    <title>Only Comp — Especialistas en Reparación y Gaming | Buenos Aires</title>
+    <meta name="description" content="Only Comp: Especialistas en reparación de PCs, equipos remanufacturados con garantía y armado de computadoras gaming personalizadas en Buenos Aires.">
+    <meta name="keywords" content="reparacion PC, pc gaming, equipos remanufacturados, armado PC, servicio tecnico, Buenos Aires, Only Comp">
+    <meta name="author" content="Only Comp">
+
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
+
+    <link rel="stylesheet" href="./assets/css/critical.css">
     <link rel="stylesheet" href="./assets/css/style.css">
     <link rel="stylesheet" href="./assets/css/custom.css">
+    <link rel="stylesheet" href="./assets/css/navigation.css">
+
+    <script src="./assets/js/init.js"></script>
+
+    <style>
+    /* ============================
+       VARIABLES & BASE
+    ============================ */
+    /*
+     * DISENO: Paleta Dark Mode profesional.
+     * --dark / --dark-2 / --dark-3: tres niveles de fondo (de mas oscuro a menos).
+     *   Se usan como capas: --dark = base, --dark-2 = secciones alternas,
+     *   --dark-3 = componentes elevados (no implementado aun, reservado para futuro).
+     * --blue + --blue-l: azul primario (botones, CTAs) y su version clara (iconos, hovers).
+     * --purple: compañero del blue en gradientes diagonales (135deg blue->purple).
+     * --green: estado positivo, punto de "en linea", badges de exito.
+     */
+    :root {
+        --dark:   #080d1a;
+        --dark-2: #0d1526;
+        --dark-3: #1a2540;
+        --blue:   #2563eb;
+        --blue-l: #60a5fa;
+        --purple: #7c3aed;
+        --green:  #10b981;
+        --text-muted: rgba(255,255,255,0.45);
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+        background: var(--dark);
+        color: #e2e8f0;
+        font-family: 'ClashDisplay', 'Inter', system-ui, -apple-system, sans-serif;
+        overflow-x: hidden;
+    }
+
+    /* ============================
+       NAVBAR
+    ============================ */
+    /*
+     * DISENO: Transparente en el hero, solido al hacer scroll.
+     *   JS agrega la clase .scrolled cuando scrollY > 50px.
+     *   Sin .scrolled -> fondo transparente (video de fondo visible).
+     *   Con .scrolled -> background rgba oscuro + backdrop-filter blur.
+     * backdrop-filter: blur(20px) = efecto glassmorphism (vidrio esmerilado).
+     *
+     * LINEA ACTIVA (.nav-link::after):
+     *   Empieza con width:0 y crece a 60% con transition -> subrayado animado.
+     *   Se centra con left:50% + transform:translateX(-50%).
+     *   La clase .active la gestiona el scroll spy en JS (ver updateSpy).
+     */
+    .navbar { transition: background 0.4s ease, box-shadow 0.4s ease; }
+    /* .navbar-solid se activa cuando salimos del hero */
+    .navbar-solid {
+        background: rgba(8,13,26,0.97) !important;
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        box-shadow: 0 1px 12px rgba(0,0,0,0.45);
+    }
+    .nav-link {
+        font-weight: 500;
+        font-size: 0.88rem;
+        letter-spacing: 0.3px;
+        transition: color 0.2s;
+        position: relative;
+    }
+    .nav-link::after {
+        content: '';
+        position: absolute;
+        bottom: 6px; left: 50%;
+        transform: translateX(-50%);
+        width: 0; height: 2px;
+        background: var(--blue-l);
+        border-radius: 2px;
+        transition: width 0.3s;
+    }
+    .nav-link:hover::after, .nav-link.active::after { width: 60%; }
+    .nav-link:hover, .nav-link.active { color: var(--blue-l) !important; }
+
+    /* ============================
+       SECTION UTILS
+    ============================ */
+    .section-padding { padding: 100px 0; }
+    .section-label {
+        display: inline-block;
+        background: rgba(37,99,235,0.1);
+        color: var(--blue-l);
+        border: 1px solid rgba(37,99,235,0.22);
+        padding: 0.3rem 1rem;
+        border-radius: 50px;
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 2.5px;
+        margin-bottom: 0.75rem;
+    }
+    .section-divider {
+        width: 55px; height: 3px;
+        background: linear-gradient(90deg, var(--blue), var(--purple));
+        border-radius: 2px;
+        margin: 0.9rem auto 1.5rem;
+    }
+    .section-divider.left { margin-left: 0; }
+
+    /* ============================
+       HERO
+    ============================ */
+    /*
+     * DISENO: Seccion full-viewport con video de fondo en loop.
+     *   Video con position:fixed crea un efecto parallax natural al scrollear.
+     *   Un div semitransparente encima del video garantiza legibilidad del texto.
+     *   min-height:100vh + display:flex + align-items:center centra el contenido.
+     *
+     * TIPOGRAFIA FLUIDA (.hero-title):
+     *   clamp(2.8rem, 7vw, 5.5rem) -> se adapta al ancho sin media queries.
+     *   Min 2.8rem en movil, max 5.5rem en escritorio, fluido entre ambos.
+     *
+     * TEXTO CON DEGRADADO (.text-gradient):
+     *   background:linear-gradient() definido sobre el elemento de texto.
+     *   -webkit-background-clip:text -> el degradado se recorta a la forma de las letras.
+     *   -webkit-text-fill-color:transparent -> hace visible el degradado de fondo.
+     *
+     * BADGE (.hero-badge): chip con punto verde animado (keyframe pulse-dot).
+     *   El punto usa scale + opacity en loop para simular un indicador "en linea".
+     */
+    #hero {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        padding-top: 80px;
+        position: relative;
+    }
+    .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        background: rgba(37,99,235,0.08);
+        border: 1px solid rgba(37,99,235,0.18);
+        padding: 0.4rem 1.1rem;
+        border-radius: 50px;
+        font-size: 0.75rem;
+        color: var(--blue-l);
+        margin-bottom: 1.75rem;
+    }
+    .hero-badge .dot { width: 7px; height: 7px; background: var(--green); border-radius: 50%; animation: pulse-dot 2s infinite; }
+    @keyframes pulse-dot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.6;transform:scale(1.4)} }
+    .hero-title {
+        font-size: clamp(2.8rem, 7vw, 5.5rem);
+        font-weight: 800;
+        line-height: 1.08;
+        letter-spacing: -1.5px;
+        color: #fff;
+    }
+    .text-gradient {
+        background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    .hero-desc {
+        font-size: 1.05rem;
+        color: rgba(255,255,255,0.55);
+        max-width: 550px;
+        margin: 1.5rem auto 2.5rem;
+        line-height: 1.75;
+    }
+    .hero-stats {
+        display: flex;
+        gap: 2.5rem;
+        justify-content: center;
+        margin-top: 3rem;
+        flex-wrap: wrap;
+    }
+    .stat-number { font-size: 2rem; font-weight: 800; color: #fff; line-height: 1; }
+    .stat-label { font-size: 0.72rem; color: rgba(255,255,255,0.4); margin-top: 0.2rem; text-transform: uppercase; letter-spacing: 1px; }
+    .hero-scroll {
+        position: absolute;
+        bottom: 2.5rem; left: 50%;
+        transform: translateX(-50%);
+        display: flex; flex-direction: column; align-items: center; gap: 0.4rem;
+        color: rgba(255,255,255,0.25);
+        font-size: 0.68rem; text-transform: uppercase; letter-spacing: 2px;
+        animation: scrollBounce 2.5s ease-in-out infinite;
+    }
+    @keyframes scrollBounce { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(7px)} }
+
+    /* ============================
+       PRODUCTS
+    ============================ */
+    /*
+     * DISENO: Tarjetas glassmorphism sutiles sobre fondo oscuro.
+     *   background:rgba(255,255,255,0.028) -> casi transparente, funde con el fondo.
+     *   border:1px solid rgba(255,255,255,0.07) -> borde apenas visible (efecto cristal).
+     *   Hover: translateY(-10px) + box-shadow grande -> sensacion de tarjeta flotando.
+     *
+     * FADE EN IMAGEN (.product-img-wrap::after):
+     *   Pseudo-elemento con gradiente transparent -> rgba(oscuro) de abajo hacia arriba.
+     *   Crea la transicion visual suave entre la imagen y el cuerpo de la tarjeta.
+     *
+     * ZEBRA STRIPING en specs:
+     *   :nth-child(even) con opacidad levemente diferente -> legibilidad sin bordes.
+     *
+     * FONDO DE SECCION: linear-gradient con tono azulado en el centro.
+     *   ::before con radial-gradient = circulo de luz decorativo para dar profundidad.
+     */
+    #productos {
+        background: linear-gradient(170deg, var(--dark) 0%, #191640 55%, var(--dark) 100%);
+        position: relative;
+        overflow: hidden;
+    }
+    #productos::before {
+        content: '';
+        position: absolute;
+        top: -250px; left: 50%;
+        transform: translateX(-50%);
+        width: 900px; height: 900px;
+        background: radial-gradient(circle, rgba(37,99,235,0.06) 0%, transparent 70%);
+        pointer-events: none;
+    }
+    .product-card-new {
+        position: relative;
+        background: rgba(255,255,255,0.028);
+        border: 1px solid rgba(255,255,255,0.07);
+        border-radius: 1.5rem;
+        overflow: hidden;
+        transition: all 0.35s cubic-bezier(0.4,0,0.2,1);
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+    .product-card-new:hover {
+        transform: translateY(-10px);
+        border-color: rgba(96,165,250,0.35);
+        box-shadow: 0 30px 70px rgba(37,99,235,0.22), 0 0 0 1px rgba(96,165,250,0.1);
+    }
+    .product-img-wrap { height: 215px; overflow: hidden; position: relative; }
+    .product-img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
+    .product-card-new:hover .product-img-wrap img { transform: scale(1.07); }
+    .product-img-wrap::after {
+        content: '';
+        position: absolute; inset: 0;
+        background: linear-gradient(to bottom, transparent 45%, rgba(8,13,26,0.9) 100%);
+    }
+    .product-badge-wrap { position: absolute; top: 1rem; left: 1rem; z-index: 3; }
+    .product-body { padding: 1.5rem; flex: 1; display: flex; flex-direction: column; }
+    .product-category { font-size: 0.67rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: var(--blue-l); margin-bottom: 0.4rem; display: block; }
+    .product-name { font-size: 1.05rem; font-weight: 700; color: #f1f5f9; margin-bottom: 1rem; line-height: 1.4; }
+    .specs-grid-new {
+        display: flex; flex-direction: column;
+        margin-bottom: 1.25rem;
+        border-radius: 0.75rem; overflow: hidden;
+        border: 1px solid rgba(255,255,255,0.06);
+        flex: 1;
+    }
+    .spec-row-new {
+        display: flex; justify-content: space-between; align-items: center;
+        padding: 0.5rem 0.85rem;
+        background: rgba(255,255,255,0.025);
+        font-size: 0.78rem;
+        border-bottom: 1px solid rgba(255,255,255,0.045);
+        gap: 0.5rem;
+    }
+    .spec-row-new:last-child { border-bottom: none; }
+    .spec-row-new:nth-child(even) { background: rgba(255,255,255,0.018); }
+    .spec-key-new { color: rgba(255,255,255,0.4); display: flex; align-items: center; gap: 0.4rem; white-space: nowrap; }
+    .spec-key-new i { color: var(--blue-l); font-size: 0.82rem; }
+    .spec-val-new { color: #e2e8f0; font-weight: 600; text-align: right; }
+    .product-price-area { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 1rem; flex-wrap: wrap; }
+    .price-old { text-decoration: line-through; color: rgba(255,255,255,0.25); font-size: 0.85rem; }
+    .price-current { font-size: 1.5rem; font-weight: 800; color: #fff; }
+    .discount-chip {
+        background: rgba(239,68,68,0.1); color: #f87171;
+        border: 1px solid rgba(239,68,68,0.2);
+        padding: 0.15rem 0.5rem; border-radius: 50px;
+        font-size: 0.7rem; font-weight: 700;
+    }
+    .btn-consultar {
+        display: block; width: 100%;
+        padding: 0.82rem;
+        background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+        color: #fff !important;
+        font-weight: 700; font-size: 0.85rem;
+        border-radius: 0.75rem; text-align: center;
+        text-decoration: none;
+        transition: all 0.3s; border: none; cursor: pointer;
+    }
+    .btn-consultar:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(37,99,235,0.4); }
+    .products-cta-box {
+        background: rgba(255,255,255,0.025);
+        border: 1px dashed rgba(96,165,250,0.28);
+        border-radius: 1.5rem;
+        padding: 2.5rem 2rem;
+        text-align: center;
+    }
+
+    /* ============================
+       SERVICES
+    ============================ */
+    /*
+     * DISENO: Cards uniformes con efecto de elevacion en hover.
+     *   height:100% garantiza que todas las cards tengan la misma altura en el grid.
+     *   Icono (.service-icon): gradiente sutil en reposo con borde azul tenue.
+     *   En hover, el icono pasa a gradiente solido blue->purple + icono blanco.
+     *   transition:all 0.3s en el card anima border, shadow, background y transform a la vez.
+     */
+    #services { background: linear-gradient(180deg, var(--dark-2) 0%, var(--dark) 100%); }
+    .service-card {
+        background: rgba(255,255,255,0.025);
+        border: 1px solid rgba(255,255,255,0.07);
+        border-radius: 1.25rem;
+        padding: 2rem 1.75rem;
+        text-align: center;
+        height: 100%;
+        transition: all 0.3s ease;
+    }
+    .service-card:hover {
+        transform: translateY(-7px);
+        border-color: rgba(37,99,235,0.35);
+        box-shadow: 0 24px 55px rgba(37,99,235,0.14);
+        background: rgba(37,99,235,0.04);
+    }
+    .service-icon {
+        width: 64px; height: 64px;
+        border-radius: 1rem;
+        background: linear-gradient(135deg, rgba(37,99,235,0.12), rgba(124,58,237,0.12));
+        border: 1px solid rgba(37,99,235,0.18);
+        display: flex; align-items: center; justify-content: center;
+        margin: 0 auto 1.25rem;
+        font-size: 1.6rem; color: var(--blue-l);
+        transition: all 0.3s;
+    }
+    .service-card:hover .service-icon {
+        background: linear-gradient(135deg, #2563eb, #7c3aed);
+        color: #fff; border-color: transparent;
+    }
+    .service-card h5 { color: #f1f5f9; font-weight: 700; margin-bottom: 0.75rem; font-size: 1rem; }
+    .service-card p { color: rgba(255,255,255,0.48); font-size: 0.865rem; line-height: 1.72; margin: 0; }
+
+    /* ============================
+       ABOUT
+    ============================ */
+    /*
+     * DISENO: Layout de dos columnas (imagen izquierda, texto derecha).
+     *   .about-img-wrap::before: pseudo-elemento con gradiente diagonal detras de la imagen.
+     *   Usa inset:-14px para que el marco decorativo asoma alrededor.
+     *   Estadisticas (.about-stat .num): numero con degradado de texto
+     *   (mismo truco que .text-gradient: background-clip + transparent fill).
+     *   .feature-item: display:flex + gap. flex-shrink:0 en el icono evita que se deforme.
+     */
+    #about { background: var(--dark-2); }
+    .about-img-wrap { position: relative; border-radius: 1.5rem; overflow: hidden; }
+    .about-img-wrap img { width: 100%; border-radius: 1.5rem; display: block; }
+    .about-img-wrap::before {
+        content: '';
+        position: absolute; inset: -14px;
+        border-radius: 2rem;
+        background: linear-gradient(135deg, rgba(37,99,235,0.18), rgba(124,58,237,0.18));
+        z-index: -1;
+    }
+    .about-stat {
+        background: rgba(255,255,255,0.035);
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 1rem;
+        padding: 1.2rem 1.4rem;
+    }
+    .about-stat .num {
+        font-size: 1.9rem; font-weight: 800;
+        background: linear-gradient(135deg, #60a5fa, #a78bfa);
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        background-clip: text; line-height: 1;
+    }
+    .about-stat .lbl { font-size: 0.72rem; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 1px; margin-top: 0.25rem; }
+    .feature-item { display: flex; gap: 1rem; margin-bottom: 1.5rem; align-items: flex-start; }
+    .feature-icon {
+        width: 44px; height: 44px; border-radius: 0.75rem;
+        background: linear-gradient(135deg, rgba(37,99,235,0.12), rgba(124,58,237,0.12));
+        border: 1px solid rgba(37,99,235,0.18);
+        display: flex; align-items: center; justify-content: center;
+        flex-shrink: 0; color: var(--blue-l); font-size: 1.15rem;
+    }
+    .feature-item h6 { color: #f1f5f9; font-weight: 700; margin-bottom: 0.25rem; font-size: 0.95rem; }
+    .feature-item p { color: rgba(255,255,255,0.48); font-size: 0.845rem; line-height: 1.68; margin: 0; }
+
+    /* ============================
+       CONTACT
+    ============================ */
+    /*
+     * DISENO: Formulario glassmorphism + tarjeta de informacion lateral.
+     *   Inputs con rgba muy bajo -> se integran al fondo oscuro visualmente.
+     *   Focus ring: box-shadow 0 0 0 3px rgba(blue,0.1) -> accesible sin outline nativo.
+     *   #formMessage: oculto con .d-none, JS le agrega .alert-success o .alert-danger.
+     *
+     * ANTI-SPAM (ver enviar.php + config.php):
+     *   Token CSRF: generado en JS al cargar, validado en PHP al recibir el POST.
+     *   Honeypot: campo #website oculto con display:none. Si tiene valor -> es un bot.
+     *   Tiempo minimo: sessionStorage guarda el momento de carga. Si el formulario
+     *   se envia en menos de 3 segundos -> rechazado (los bots son instantaneos).
+     *
+     * #contact::after: radial-gradient decorativo en la esquina inferior-derecha.
+     */
+    #contact {
+        background: linear-gradient(160deg, var(--dark) 0%, #191640 55%, var(--dark) 100%);
+        position: relative; overflow: hidden;
+    }
+    #contact::after {
+        content: '';
+        position: absolute; bottom: -150px; right: -150px;
+        width: 550px; height: 550px;
+        background: radial-gradient(circle, rgba(124,58,237,0.07) 0%, transparent 70%);
+        pointer-events: none;
+    }
+    .contact-form-wrap {
+        background: rgba(255,255,255,0.025);
+        border: 1px solid rgba(255,255,255,0.07);
+        border-radius: 1.5rem;
+        padding: 2.5rem;
+    }
+    .contact-form-wrap label { color: rgba(255,255,255,0.65); font-size: 0.82rem; font-weight: 600; margin-bottom: 0.4rem; display: block; }
+    .contact-form-wrap .form-control {
+        background: rgba(255,255,255,0.045);
+        border: 1px solid rgba(255,255,255,0.09);
+        color: #e2e8f0; border-radius: 0.75rem;
+        padding: 0.82rem 1rem; transition: all 0.2s;
+    }
+    .contact-form-wrap .form-control::placeholder { color: rgba(255,255,255,0.22); }
+    .contact-form-wrap .form-control:focus {
+        background: rgba(255,255,255,0.065);
+        border-color: rgba(37,99,235,0.5);
+        box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+        color: #e2e8f0;
+    }
+    .btn-enviar {
+        background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+        border: none; color: #fff;
+        padding: 0.9rem 2rem; border-radius: 0.75rem;
+        font-weight: 700; transition: all 0.3s;
+        width: 100%; font-size: 0.95rem; cursor: pointer;
+    }
+    .btn-enviar:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(37,99,235,0.4); color: #fff; }
+    .btn-enviar:disabled { opacity: 0.65; cursor: not-allowed; transform: none; }
+    
+    /* Mensaje del formulario */
+    #formMessage {
+        padding: 0.875rem 1rem;
+        border-radius: 0.5rem;
+        font-size: 0.9rem;
+        margin-top: 0.5rem;
+        font-weight: 500;
+    }
+    #formMessage.alert-success {
+        background: rgba(16,185,129,0.15);
+        border: 1px solid rgba(16,185,129,0.3);
+        color: #10b981;
+    }
+    #formMessage.alert-danger {
+        background: rgba(239,68,68,0.15);
+        border: 1px solid rgba(239,68,68,0.3);
+        color: #ef4444;
+    }
+    
+    .contact-info-card {
+        background: rgba(255,255,255,0.025);
+        border: 1px solid rgba(255,255,255,0.07);
+        border-radius: 1.5rem;
+        padding: 2rem;
+        height: 100%;
+    }
+    .contact-info-item {
+        display: flex; align-items: flex-start; gap: 1rem;
+        padding: 1rem 0;
+        border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .contact-info-item:last-child { border-bottom: none; }
+    .contact-info-icon {
+        width: 42px; height: 42px; border-radius: 0.75rem;
+        background: linear-gradient(135deg, rgba(37,99,235,0.12), rgba(124,58,237,0.12));
+        border: 1px solid rgba(37,99,235,0.18);
+        display: flex; align-items: center; justify-content: center;
+        flex-shrink: 0; color: var(--blue-l); font-size: 1.1rem;
+    }
+    .contact-info-item h6 { color: #f1f5f9; font-weight: 700; margin-bottom: 0.2rem; font-size: 0.87rem; }
+    .contact-info-item p { color: rgba(255,255,255,0.42); font-size: 0.82rem; margin: 0; line-height: 1.55; }
+    .contact-trust {
+        background: rgba(16,185,129,0.06);
+        border: 1px solid rgba(16,185,129,0.15);
+        border-radius: 0.875rem;
+        padding: 1rem 1.25rem;
+        text-align: center;
+        margin-top: 1.5rem;
+    }
+
+    /* ============================
+       FOOTER
+    ============================ */
+    footer {
+        background: var(--dark);
+        border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .footer-link {
+        color: rgba(255,255,255,0.38);
+        font-size: 0.875rem;
+        text-decoration: none;
+        transition: color 0.2s;
+    }
+    .footer-link:hover { color: var(--blue-l); }
+    .social-icon {
+        color: rgba(255,255,255,0.3);
+        font-size: 1.25rem;
+        transition: color 0.2s, transform 0.2s;
+    }
+    .social-icon:hover { color: var(--blue-l); transform: translateY(-2px); }
+
+    /* ============================
+       WHATSAPP
+    ============================ */
+    .whatsapp-float {
+        position: fixed; bottom: 28px; right: 28px;
+        width: 56px; height: 56px;
+        background: #25d366; color: #fff;
+        border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1.65rem;
+        box-shadow: 0 4px 22px rgba(37,211,102,0.38);
+        z-index: 999; text-decoration: none;
+        transition: all 0.3s;
+        opacity: 0;
+        visibility: hidden;
+        transform: scale(0.8) translateY(20px);
+    }
+    .whatsapp-float.show {
+        opacity: 1;
+        visibility: visible;
+        transform: scale(1) translateY(0);
+    }
+    .whatsapp-float:hover { 
+        background: #128c7e; 
+        color: #fff; 
+        transform: scale(1.1) translateY(0); 
+        box-shadow: 0 6px 30px rgba(37,211,102,0.5);
+    }
+    .whatsapp-float i {
+        animation: pulse-whatsapp 2s ease-in-out infinite;
+    }
+    @keyframes pulse-whatsapp {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+    }
+
+    /* ============================
+       REVEAL ANIMATIONS
+    ============================ */
+    .reveal {
+        opacity: 0;
+        transform: translateY(28px);
+        transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-d1 { transition-delay: 0.1s; }
+    .reveal-d2 { transition-delay: 0.2s; }
+    .reveal-d3 { transition-delay: 0.3s; }
+
+    /* ============================
+       RESPONSIVE
+    ============================ */
+    @media (max-width: 991px) {
+        .section-padding { padding: 70px 0; }
+        .hero-stats { gap: 1.5rem; }
+        #navbarNav {
+            background: rgba(8,13,26,0.98);
+            border-radius: 1rem;
+            padding: 1rem 1.25rem;
+            margin-top: 0.5rem;
+            border: 1px solid rgba(255,255,255,0.07);
+        }
+    }
+    @media (max-width: 575px) {
+        .hero-stats { gap: 1.25rem; }
+        .stat-number { font-size: 1.6rem; }
+        .contact-form-wrap, .contact-info-card { padding: 1.5rem; }
+    }
+    </style>
 </head>
 
-<!-- TRAINEE NOTE: data-bs-spy activa el scroll spy de Bootstrap para resaltar navegación activa -->
-<body data-bs-spy="scroll" data-bs-target=".navbar" data-bs-offset="70">
 
-    <!-- ESTILOS PERSONALIZADOS PARA NAVEGACIÓN SUAVE -->
-    <style>
-        html {
-            scroll-behavior: smooth;
-        }
-        
-        /* 
-        ===== SISTEMA DE NAVBAR TRANSPARENTE =====
-        GUÍA DE DESARROLLO CSS:
-        
-        🎨 FILOSOFÍA DE DISEÑO:
-        - Estado inicial: Transparente para mostrar video de fondo
-        - Estado scroll: Fondo sólido para legibilidad durante navegación
-        - Transiciones suaves para experiencia fluida
-        
-        📝 TÉCNICAS IMPLEMENTADAS:
-        1. RGBA colors para transparencias controladas
-        2. text-shadow para legibilidad sobre video
-        3. backdrop-filter para efectos glassmorphism
-        4. transform para micro-interacciones
-        */
-        
-        /* Estado inicial del navbar - transparente */
-        .navbar-nav .nav-link {
-            color: rgba(255,255,255,0.9) !important; /* Blanco semitransparente */
-            font-weight: 500; /* Peso medio para buena legibilidad */
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.5); /* Sombra para contraste sobre video */
-            transition: all 0.3s ease; /* Transición suave para todos los cambios */
-        }
-        
-        /* Efectos hover en links de navegación */
-        .navbar-nav .nav-link:hover {
-            color: #ffc107 !important; /* Amarillo dorado para hover */
-            transform: translateY(-2px); /* Micro-animación hacia arriba */
-        }
-        
-        /* Estado activo de navegación */
-        .navbar-nav .nav-link.active {
-            color: #ffc107 !important; /* Amarillo para página actual */
-            font-weight: 600; /* Peso mayor para indicar estado activo */
-        }
-        
-        /* Estilo del logo/brand */
-        .navbar-brand {
-            color: rgba(255,255,255,0.95) !important; /* Casi blanco opaco */
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.7); /* Sombra más pronunciada */
-        }
-        
-        /* Botón de call-to-action en navbar */
-        .btn-outline-light {
-            border-color: rgba(255,255,255,0.8); /* Borde semitransparente */
-            color: rgba(255,255,255,0.9); /* Texto semitransparente */
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.5); /* Sombra para legibilidad */
-        }
-        
-        /* 
-        ===== ESTADO NAVBAR CON SCROLL =====
-        ACTIVADO POR: IntersectionObserver + navegación tracking
-        TRIGGER: Salida del hero OR navegación manual
-        */
-        .navbar-scrolled {
-            background: rgba(33, 37, 41, 0.98) !important; /* Fondo más opaco para mejor legibilidad */
-            backdrop-filter: blur(15px) saturate(1.5); /* Efecto glassmorphism mejorado */
-            border-bottom: 1px solid rgba(255,255,255,0.15); /* Borde más visible */
-            box-shadow: 0 4px 30px rgba(0,0,0,0.2); /* Sombra más pronunciada */
-            transform: translateY(0); /* Asegurar posición correcta */
-        }
-        
-        /* Transición mejorada para el navbar */
-        #mainNavbar {
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important; /* Curva de transición suave */
-            will-change: background-color, backdrop-filter, box-shadow; /* Optimización GPU */
-        }
-        
-        /* Preload de clases para evitar flash */
-        .navbar-preload {
-            transition: none !important;
-        }
-        
-        /* Offset para compensar navbar fijo */
-        section {
-            scroll-margin-top: 70px;
-        }
-        
-        /* Estilos mejorados para vitrina de productos */
-        .product-showcase:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 25px 50px rgba(0,0,0,0.4);
-            border-color: rgba(255,255,255,0.4) !important;
-        }
-        
-        .showcase-image {
-            width: 80px;
-            height: 80px;
-            object-fit: cover;
-            border-radius: 10px;
-        }
-    </style>
+<body>
 
-    <!-- 
-    ===== NAVIGATION BAR - SISTEMA AVANZADO =====
-    GUÍA DE DESARROLLO COMPLETA:
-    
-    📋 ESTRUCTURA DEL NAVBAR:
-    - navbar-expand-lg: Colapsa en pantallas menores a 992px (lg breakpoint)
-    - sticky-top: Mantiene el navbar fijo en la parte superior durante scroll
-    - background: transparent inicial para mostrar el video de fondo
-    - transition: Animación suave de 0.3s para cambios de fondo
-    
-    📱 RESPONSIVE BEHAVIOR:
-    - Desktop: Menú horizontal completo
-    - Tablet/Mobile: Menú hamburguesa colapsable
-    
-    🎨 ESTADOS VISUALES:
-    1. INICIAL: Transparente con video visible de fondo
-    2. SCROLL: Fondo oscuro semitransparente activado por JavaScript
-    
-    🔧 INTEGRACIÓN TÉCNICA:
-    - ID 'mainNavbar' para JavaScript scroll detection
-    - Bootstrap 5 classes para responsive design
-    - GSAP animations para efectos suaves
-    -->
-    <nav class="navbar navbar-expand-lg sticky-top" id="mainNavbar" style="background: transparent; transition: all 0.3s ease; z-index: 1000;">
-        <div class="container-fluid px-4">
-            <div class="d-flex align-items-center">
-                <img src="./assets/images/circular-logo.png" alt="Only Comp Logo" class="me-2" style="width:40px; height:40px; object-fit:cover; border-radius:50%;">
-                <!-- BRAND/LOGO: Siempre visible, enlace a la página principal -->
-                <a class="navbar-brand text-white fw-bold fs-3 mb-0" href="#hero">
-                    Only Comp
-                </a>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg" id="mainNavbar" style="background: transparent; z-index: 1050; position: fixed; top: 0; left: 0; width: 100%;">
+        <div class="container">
+            <div class="d-flex align-items-center gap-2">
+                <img src="./assets/images/circular-logo.png" alt="Only Comp" style="width:38px;height:38px;object-fit:cover;border-radius:50%;">
+                <a class="navbar-brand text-white fw-bold fs-4 mb-0" href="#hero">Only Comp</a>
             </div>
-            
-            <!-- HAMBURGER BUTTON: Solo visible en móviles -->
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Menú" style="filter:invert(1);">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            
-            <!-- COLLAPSIBLE MENU: Se oculta en móviles, se muestra al hacer clic en hamburger -->
             <div class="collapse navbar-collapse" id="navbarNav">
-                <!-- NAVIGATION LINKS: ms-auto alinea a la derecha -->
                 <ul class="navbar-nav ms-auto me-3">
-                    <li class="nav-item">
-                        <a class="nav-link text-light px-3" href="#hero">Inicio</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-light px-3" href="#portfolio">Productos</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-light px-3" href="#services">Servicios</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-light px-3" href="#about">Nosotros</a>
-                    </li>                   
-                    <li class="nav-item">
-                        <a class="nav-link text-light px-3" href="#contact">Contacto</a>
-                    </li>
+                    <li class="nav-item"><a class="nav-link text-light px-3" href="#hero">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link text-light px-3" href="#productos">Productos</a></li>
+                    <li class="nav-item"><a class="nav-link text-light px-3" href="#services">Servicios</a></li>
+                    <li class="nav-item"><a class="nav-link text-light px-3" href="#about">Nosotros</a></li>
+                    <li class="nav-item"><a class="nav-link text-light px-3" href="#contact">Contacto</a></li>
                 </ul>
-                <!-- CALL TO ACTION BUTTON -->
-                <a href="#contact" class="btn btn-outline-light px-4">Solicitar Servicio</a>
+                <a href="#contact" class="btn btn-outline-light px-4 rounded-pill fw-semibold" style="font-size:0.88rem;">Pedir Presupuesto</a>
             </div>
         </div>
     </nav>
 
     <!-- HERO -->
-    <section id="hero" class="d-flex align-items-center position-relative overflow-hidden" style="min-height: 100vh; padding-top: 0;">
-        <!-- 
-        ===== VIDEO DE FONDO EXTENDIDO =====
-        GUÍA DE DESARROLLO: Este video cubre toda la pantalla incluyendo el área del navbar
-        - position: fixed para que el video permanezca fijo durante el scroll inicial
-        - top: 0 para comenzar desde la parte superior de la ventana (cubriendo navbar)
-        - z-index: -2 para estar detrás de todo el contenido pero visible a través del navbar transparente
-        - object-fit: cover mantiene las proporciones del video llenando toda el área
-        -->
-        <video autoplay muted loop class="position-fixed w-100" style="top: 0; left: 0; height: 100vh; object-fit: cover; z-index: -2;" id="heroVideo">
+    <section id="hero">
+        <video autoplay muted loop playsinline class="position-fixed w-100" style="top:0;left:0;height:100vh;object-fit:cover;z-index:-2;" id="heroVideo">
             <source src="./assets/images/home-onlycomp.mp4" type="video/mp4">
-            <!-- Fallback gradient para navegadores que no soportan video -->
-            <div class="position-fixed top-0 start-0 w-100" style="height: 100vh; background: linear-gradient(135deg, #000000 0%, #1e3a8a 100%); z-index: -2;"></div>
         </video>
-        
-        <!-- 
-        ===== OVERLAY PARA LEGIBILIDAD =====
-        GUÍA DE DESARROLLO: Overlay semitransparente para mejorar el contraste del texto
-        - position: fixed para cubrir toda la pantalla incluyendo navbar
-        - z-index: -1 para estar encima del video pero debajo del contenido
-        - background con alpha 0.4 para mantener visibilidad del video pero mejorar legibilidad
-        -->
-        <div class="position-fixed top-0 start-0 w-100" style="height: 100vh; background: rgba(0,0,0,0.4); z-index: -1;" id="heroOverlay"></div>
-        
-        <!-- 
-        ===== CONTENIDO PRINCIPAL HERO =====
-        GUÍA DE DESARROLLO:
-        
-        📐 ESTRUCTURA DE LAYOUT:
-        - container: Bootstrap container para responsive margins
-        - position-relative: Permite z-index positioning
-        - z-index: 2 para estar encima del video y overlay
-        
-        🎯 SISTEMA DE GRID:
-        - row justify-content-center: Centra el contenido horizontalmente
-        - text-center: Alineación central del texto
-        - col-lg-10: Ocupa 10/12 columnas en pantallas grandes para mejor legibilidad
-        
-        💡 MEJORES PRÁCTICAS:
-        - Contenido semánticamente estructurado (h1, h3, botones)
-        - Jerarquía visual clara con diferentes tamaños de fuente
-        - Spacing consistente con clases Bootstrap (mb-4, mt-5, etc.)
-        -->
-        <div class="container position-relative" style="z-index: 2; padding-top: 80px;">
-            <div class="row justify-content-center text-center">
-                <div class="col-lg-10">
-                    <!-- TÍTULO PRINCIPAL MÁS DESTACADO -->
-                    <h1 class="text-uppercase text-white fw-bold mb-4" style="font-size: 4.5rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); letter-spacing: 3px;">
-                        ONLY COMP
+        <div class="position-fixed top-0 start-0 w-100" style="height:100vh;background:rgba(8,13,26,0.72);z-index:-1;"></div>
+
+        <div class="container position-relative text-center" style="z-index:2;">
+            <div class="row justify-content-center">
+                <div class="col-lg-9 col-xl-8">
+                    <div class="hero-badge">
+                        <span class="dot"></span>
+                        Especialistas en informática · Buenos Aires
+                    </div>
+                    <h1 class="hero-title mb-0">
+                        Solo <span class="text-gradient">los mejores</span><br>equipos para vos
                     </h1>
-                    
-                    <!-- SUBTÍTULO CON MEJOR CONTRASTE -->
-                    <h3 class="text-light mb-5 fw-semibold" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.8); max-width: 800px; margin: 0 auto;">
-                        Especialistas en Reparación • Equipos Remanufacturados • PCs Personalizados
-                    </h3>
-                    
-                    <!-- BOTONES DE ACCIÓN -->
-                    <div class="mt-5">
-                        <a href="#services" class="btn btn-outline-light btn-lg me-3 px-5 py-3 fw-semibold" style="border-width: 2px;">Ver Servicios</a>
-                        <a href="#contact" class="btn btn-light btn-lg ms-2 px-5 py-3 fw-semibold">Solicitar Presupuesto</a>
+                    <p class="hero-desc">
+                        Reparación de PCs, equipos remanufacturados con garantía y armado de computadoras a medida. Más de 10 años de experiencia en La Matanza.
+                    </p>
+                    <div class="d-flex justify-content-center gap-3 flex-wrap">
+                        <a href="#productos" class="btn btn-lg px-5 py-3 fw-bold rounded-pill" style="background:linear-gradient(135deg,#2563eb,#7c3aed);border:none;box-shadow:0 0 25px rgba(37,99,235,0.35);color:#fff;">
+                            Ver Productos
+                        </a>
+                        <a href="#contact" class="btn btn-outline-light btn-lg px-5 py-3 fw-semibold rounded-pill" style="border-width:1.5px;">
+                            Pedir Presupuesto
+                        </a>
                     </div>
-                    
-                    <!-- VITRINA DE PRODUCTOS -->
-                    <div class="mt-5 pt-4">
-                        <h5 class="text-white mb-4 fw-semibold">Productos Destacados</h5>
-                        <div class="row g-4 justify-content-center">
-                            <div class="col-xl-3 col-lg-6 col-md-6">
-                                <div class="product-showcase p-4 text-center" style="cursor: pointer; background: rgba(0,0,0,0.7); backdrop-filter: blur(15px); border-radius: 20px; transition: transform 0.3s ease, box-shadow 0.3s ease; border: 1px solid rgba(255,255,255,0.2);" onclick="scrollToSection('portfolio')">
-                                    <img src="https://images.unsplash.com/photo-1518118627599-2439d264fef7?w=80&h=80&fit=crop" alt="PCs Remanufacturadas" style="width: 80px; height: 80px; object-fit: cover; border-radius: 12px;" class="mb-3">
-                                    <h6 class="text-white fw-bold mb-2 small">PCs Remanufacturadas</h6>
-                                    <span class="badge bg-primary small px-3 py-1">Desde $45,000</span>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-lg-6 col-md-6">
-                                <div class="product-showcase p-4 text-center" style="cursor: pointer; background: rgba(0,0,0,0.7); backdrop-filter: blur(15px); border-radius: 20px; transition: transform 0.3s ease, box-shadow 0.3s ease; border: 1px solid rgba(255,255,255,0.2);" onclick="scrollToSection('portfolio')">
-                                    <img src="https://images.unsplash.com/photo-1593305841991-05c297ba4575?w=80&h=80&fit=crop" alt="PCs Gaming" style="width: 80px; height: 80px; object-fit: cover; border-radius: 12px;" class="mb-3">
-                                    <h6 class="text-white fw-bold mb-2 small">PCs Gaming</h6>
-                                    <span class="badge bg-success small px-3 py-1">Desde $120,000</span>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-lg-6 col-md-6">
-                                <div class="product-showcase p-4 text-center" style="cursor: pointer; background: rgba(0,0,0,0.7); backdrop-filter: blur(15px); border-radius: 20px; transition: transform 0.3s ease, box-shadow 0.3s ease; border: 1px solid rgba(255,255,255,0.2);" onclick="scrollToSection('portfolio')">
-                                    <img src="https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=80&h=80&fit=crop" alt="Monitores" style="width: 80px; height: 80px; object-fit: cover; border-radius: 12px;" class="mb-3">
-                                    <h6 class="text-white fw-bold mb-2 small">Monitores</h6>
-                                    <span class="badge bg-warning small px-3 py-1">Desde $25,000</span>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-lg-6 col-md-6">
-                                <div class="product-showcase p-4 text-center" style="cursor: pointer; background: rgba(0,0,0,0.7); backdrop-filter: blur(15px); border-radius: 20px; transition: transform 0.3s ease, box-shadow 0.3s ease; border: 1px solid rgba(255,255,255,0.2);" onclick="scrollToSection('portfolio')">
-                                    <img src="https://images.unsplash.com/photo-1580052614034-c55d20bfee3b?w=80&h=80&fit=crop" alt="Accesorios" style="width: 80px; height: 80px; object-fit: cover; border-radius: 12px;" class="mb-3">
-                                    <h6 class="text-white fw-bold mb-2 small">Accesorios</h6>
-                                    <span class="badge bg-info small px-3 py-1">Ver Catálogo</span>
-                                </div>
-                            </div>
+                    <div class="hero-stats">
+                        <div class="stat-item">
+                            <div class="stat-number">+10</div>
+                            <div class="stat-label">Años de experiencia</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">500+</div>
+                            <div class="stat-label">Equipos reparados</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">3 meses</div>
+                            <div class="stat-label">Garantía incluida</div>
                         </div>
                     </div>
                 </div>
@@ -299,400 +673,388 @@
         </div>
     </section>
 
-     <!-- 
-     ===== SECCIÓN PRODUCTOS =====
-     GUÍA DE DESARROLLO:
-     
-     🛍️ OBJETIVO: Mostrar catálogo de productos con diseño atractivo
-     📱 RESPONSIVE: Grid system Bootstrap para adaptabilidad
-     🎨 DISEÑO: Cards con overlay gradients para información
-     
-     📋 ESTRUCTURA TÉCNICA:
-     - section-padding: Clase custom para spacing consistente
-     - bg-light: Fondo claro para contraste con hero oscuro
-     - Grid 6 productos: 3 columnas en desktop, responsivo
-     
-     💡 MEJORES PRÁCTICAS IMPLEMENTADAS:
-     - Imágenes optimizadas con Unsplash
-     - Alt text descriptivo para SEO
-     - Height fijo para cards uniformes
-     - Badges con colores semánticos
-     -->
-    <section id="portfolio" class="section-padding bg-light">
+
+    <!-- PRODUCTOS -->
+    <section id="productos" class="section-padding">
         <div class="container">
-            <div class="row">
-                <div class="col-12 text-center">
-                    <!-- Título de sección con elementos visuales -->
-                    <div class="section-title">
-                        <h1 class="display-4 fw-semibold">Nuestros Productos</h1>
-                        <div class="line"></div> <!-- Línea decorativa CSS -->
-                        <p>Descubre nuestra selección de equipos remanufacturados y PCs armados personalizados con la mejor relación calidad-precio</p>
-                    </div>
-                </div>
+            <div class="text-center mb-5 reveal">
+                <span class="section-label">Catálogo</span>
+                <h2 class="display-5 fw-bold text-white mt-2">Productos Destacados</h2>
+                <div class="section-divider"></div>
+                <p style="color:rgba(255,255,255,0.5);max-width:580px;margin:0 auto;">Equipos de alta calidad con garantía y soporte incluido. ¡También armamos a medida!</p>
             </div>
+
+            <!-- PRIMERA FILA DE PRODUCTOS -->
             <div class="row g-4 justify-content-center">
+
+                <!-- PC Remanufacturada Dell -->
                 <div class="col-lg-4 col-md-6">
-                    <div class="product-card position-relative overflow-hidden rounded-3 shadow h-100">
-                        <img src="https://images.unsplash.com/photo-1518118627599-2439d264fef7?w=400&h=300&fit=crop&crop=center" alt="Computadoras remanufacturadas" class="img-fluid w-100" style="height: 280px; object-fit: cover;">
-                        <div class="product-overlay position-absolute bottom-0 start-0 w-100 p-4" style="background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);">
-                            <h4 class="text-white fw-bold mb-2">Computadoras Remanufacturadas</h4>
-                            <p class="text-light mb-3 small">Dell, HP, Lenovo con Intel i5/i7, 16GB RAM, SSD.</p>
-                            <span class="badge bg-primary fs-6 px-3 py-2">Desde $45,000</span>
+                    <div class="product-card-new">
+                        <div class="product-badge-wrap">
+                            <span class="badge bg-danger fw-bold px-3 py-2 rounded-pill">-15% OFF</span>
                         </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6">
-                    <div class="product-card position-relative overflow-hidden rounded-3 shadow h-100">
-                        <img src="https://images.unsplash.com/photo-1593305841991-05c297ba4575?w=400&h=300&fit=crop&crop=center" alt="PC Gaming RGB" class="img-fluid w-100" style="height: 280px; object-fit: cover;">
-                        <div class="product-overlay position-absolute bottom-0 start-0 w-100 p-4" style="background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);">
-                            <h4 class="text-white fw-bold mb-2">PCs Gaming</h4>
-                            <p class="text-light mb-3 small">Equipos personalizados para gaming de alto rendimiento.</p>
-                            <span class="badge bg-success fs-6 px-3 py-2">Desde $120,000</span>
+                        <div class="product-img-wrap">
+                            <img src="/assets/images/dellcompu.png" alt="PC Dell OptiPlex 7070">
                         </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6">
-                    <div class="product-card position-relative overflow-hidden rounded-3 shadow h-100">
-                        <img src="https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=400&h=300&fit=crop&crop=center" alt="Monitores" class="img-fluid w-100" style="height: 280px; object-fit: cover;">
-                        <div class="product-overlay position-absolute bottom-0 start-0 w-100 p-4" style="background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);">
-                            <h4 class="text-white fw-bold mb-2">Monitores</h4>
-                            <p class="text-light mb-3 small">Monitores LED/LCD en óptimo estado, varias marcas.</p>
-                            <span class="badge bg-warning fs-6 px-3 py-2">Desde $25,000</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6">
-                    <div class="product-card position-relative overflow-hidden rounded-3 shadow h-100">
-                        <img src="https://images.unsplash.com/photo-1580052614034-c55d20bfee3b?w=400&h=300&fit=crop&crop=center" alt="Accesorios PC" class="img-fluid w-100" style="height: 280px; object-fit: cover;">
-                        <div class="product-overlay position-absolute bottom-0 start-0 w-100 p-4" style="background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);">
-                            <h4 class="text-white fw-bold mb-2">Accesorios</h4>
-                            <p class="text-light mb-3 small">Teclados, mouse, auriculares y más accesorios.</p>
-                            <span class="badge bg-info fs-6 px-3 py-2">Ver Catálogo</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6">
-                    <div class="product-card position-relative overflow-hidden rounded-3 shadow h-100">
-                        <img src="https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=400&h=300&fit=crop&crop=center" alt="Notebooks" class="img-fluid w-100" style="height: 280px; object-fit: cover;">
-                        <div class="product-overlay position-absolute bottom-0 start-0 w-100 p-4" style="background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);">
-                            <h4 class="text-white fw-bold mb-2">Notebooks</h4>
-                            <p class="text-light mb-3 small">Laptops remanufacturadas y nuevas para trabajo.</p>
-                            <span class="badge bg-secondary fs-6 px-3 py-2">Desde $80,000</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6">
-                    <div class="product-card position-relative overflow-hidden rounded-3 shadow h-100">
-                        <img src="https://images.unsplash.com/photo-1625842268584-8f3296236761?w=400&h=300&fit=crop&crop=center" alt="Servidores" class="img-fluid w-100" style="height: 280px; object-fit: cover;">
-                        <div class="product-overlay position-absolute bottom-0 start-0 w-100 p-4" style="background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);">
-                            <h4 class="text-white fw-bold mb-2">Servidores</h4>
-                            <p class="text-light mb-3 small">Equipos empresariales y servidores refurbished.</p>
-                            <span class="badge bg-dark fs-6 px-3 py-2">Consultar</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
- <!-- 
- ===== SECCIÓN SERVICIOS =====
- GUÍA DE DESARROLLO:
- 
- 🔧 PROPÓSITO: Presentar servicios disponibles con iconografía
- 🎯 UX DESIGN: Grid de 6 servicios con iconos Remix Icon
- 📐 LAYOUT: 3 columnas desktop, 2 tablet, 1 móvil
- 
- 🛠️ COMPONENTES TÉCNICOS:
- - RemixIcon CDN para iconografía consistente
- - theme-shadow: Clase custom para sombras uniformes
- - Grid responsive con breakpoints Bootstrap
- 
- 💼 ESTRATEGIA DE CONTENIDO:
- - Títulos descriptivos y concisos
- - Descripciones orientadas a beneficios
- - Iconos semánticamente relevantes
- - Estructura SEO-friendly con headings
- -->
- <section id="services" class="section-padding bg-white">
-        <div class="container">
-            <div class="row">
-                <div class="col-12 text-center">
-                    <!-- Header de sección con elementos visuales -->
-                    <div class="section-title">
-                        <h1 class="display-4 fw-semibold">Nuestros Servicios</h1>
-                        <div class="line"></div> <!-- Elemento decorativo CSS -->
-                        <p>Ofrecemos servicios integrales de informática con la mejor calidad y garantía del mercado</p>
-                    </div>
-                </div>
-            </div>
-            <div class="row g-4 text-center">
-                <div class="col-lg-4 col-sm-6">
-                    <div class="service theme-shadow p-lg-5 p-4">
-                        <div class="iconbox">
-                            <i class="ri-computer-fill"></i>
-                        </div>
-                        <h5 class="mt-4 mb-3">Reparación de PCs</h5>
-                        <p>Diagnóstico y reparación completa de computadoras de escritorio y laptops con garantía de 6 meses.</p>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-sm-6">
-                    <div class="service theme-shadow p-lg-5 p-4">
-                        <div class="iconbox">
-                            <i class="ri-tv-2-fill"></i>
-                        </div>
-                        <h5 class="mt-4 mb-3">Reparación de Monitores</h5>
-                        <p>Servicio especializado en reparación de monitores LCD, LED y gaming. Diagnóstico gratuito.</p>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-sm-6">
-                    <div class="service theme-shadow p-lg-5 p-4">
-                        <div class="iconbox">
-                            <i class="ri-recycle-fill"></i>
-                        </div>
-                        <h5 class="mt-4 mb-3">Equipos Remanufacturados</h5>
-                        <p>PCs y laptops reacondicionados con garantía. Perfectos para oficina, estudio y uso doméstico.</p>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-sm-6">
-                    <div class="service theme-shadow p-lg-5 p-4">
-                        <div class="iconbox">
-                            <i class="ri-settings-3-fill"></i>
-                        </div>
-                        <h5 class="mt-4 mb-3">Armado de PCs</h5>
-                        <p>PCs nuevos armados bajo pedido según tus necesidades: gaming, oficina, diseño o workstations.</p>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-sm-6">
-                    <div class="service theme-shadow p-lg-5 p-4">
-                        <div class="iconbox">
-                            <i class="ri-tools-fill"></i>
-                        </div>
-                        <h5 class="mt-4 mb-3">Mantenimiento</h5>
-                        <p>Servicio de mantenimiento preventivo y correctivo para empresas y particulares.</p>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-sm-6">
-                    <div class="service theme-shadow p-lg-5 p-4">
-                        <div class="iconbox">
-                            <i class="ri-update-fill"></i>
-                        </div>
-                        <h5 class="mt-4 mb-3">Upgrades</h5>
-                        <p>Actualizaciones de hardware: memoria RAM, discos SSD, tarjetas gráficas y procesadores.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-
-
-    <!-- ABOUT -->
-    <section id="about" class="section-padding bg-light">
-        <div class="container">
-            <div class="row">
-                <div class="col-12 text-center">
-                    <div class="section-title">
-                        <h1 class="display-4 fw-semibold">Sobre Nosotros</h1>
-                        <div class="line"></div>
-                        <p>Somos especialistas en informática con más de 10 años de experiencia en reparación, venta de equipos remanufacturados y armado de PCs personalizados</p>
-                    </div>
-                </div>
-            </div>
-            <div class="row justify-content-between align-items-center">
-                <div class="col-lg-6">
-                    <div class="about-image">
-                        <img src="https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=600&h=400&fit=crop&crop=center" alt="Taller de reparación de computadoras" class="img-fluid rounded-3 shadow">
-                    </div>
-                </div>
-                <div class="col-lg-5">
-                    <h1>OutletTech</h1>
-                    <p class="mt-3 mb-4">Tu taller informático de confianza. Ofrecemos soluciones completas en tecnología con garantía y el mejor servicio al cliente.</p>
-                    <div class="d-flex pt-4 mb-3">
-                        <div class="iconbox me-4">
-                            <i class="ri-tools-fill"></i>
-                        </div>
-                        <div>
-                            <h5>Reparación Especializada</h5>
-                            <p>Diagnóstico y reparación de computadoras, laptops y monitores con garantía de 6 meses.</p>
-                        </div>
-                    </div>
-                    <div class="d-flex mb-3">
-                        <div class="iconbox me-4">
-                            <i class="ri-recycle-fill"></i>
-                        </div>
-                        <div>
-                            <h5>Equipos Remanufacturados</h5>
-                            <p>PCs y laptops reacondicionados con garantía, perfectos para oficina y uso doméstico.</p>
-                        </div>
-                    </div>
-                    <div class="d-flex">
-                        <div class="iconbox me-4">
-                            <i class="ri-settings-3-fill"></i>
-                        </div>
-                        <div>
-                            <h5>Armado Personalizado</h5>
-                            <p>PCs nuevos armados bajo pedido para gaming, trabajo profesional y oficinas.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-
-   
-
-
-
-    <!-- 
-    ===== SECCIÓN CONTACTO SEGURO =====
-    GUÍA DE DESARROLLO:
-    
-    📞 OBJETIVO: Formulario de contacto con sistema de seguridad
-    🛡️ SEGURIDAD: Honeypot, CSRF token, rate limiting
-    🎨 DISEÑO: Gradient background con formulario + info panel
-    
-    🔒 CARACTERÍSTICAS DE SEGURIDAD:
-    - Campo honeypot invisible para detectar bots
-    - Token CSRF generado dinámicamente
-    - Validación client-side y server-side
-    - Rate limiting en envíos
-    
-    📍 INTEGRACIÓN DE MAPA:
-    - Leaflet.js para mapa interactivo
-    - Coordenadas ofuscadas por seguridad
-    - Fallback para JavaScript deshabilitado
-    
-    📱 RESPONSIVE DESIGN:
-    - 2 columnas desktop: formulario + info
-    - 1 columna móvil: stack vertical
-    - Formulario ocupa 8/12 columnas para mejor UX
-    -->
-    <section class="section-padding" id="contact" style="background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);">
-        <div class="container">
-            <div class="row">
-                <div class="col-12 text-center">
-                    <!-- Header de sección con tema oscuro -->
-                    <div class="section-title">
-                        <h1 class="display-4 text-white fw-semibold">Contáctanos</h1>
-                        <div class="line bg-white"></div> <!-- Línea blanca para contraste -->
-                        <p class="text-light">¿Necesitas reparar tu PC, buscar equipos remanufacturados o armar una máquina personalizada? ¡Estamos aquí para ayudarte!</p>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <!-- FORMULARIO DE CONTACTO -->
-                <div class="col-lg-8">
-                    <form id="contactForm" action="enviar.php" method="POST" class="contact-form-section p-lg-5 p-4 h-100">
-                        <div class="text-center mb-4">
-                            <h3 class="text-dark mb-2">Solicita tu Presupuesto</h3>
-                            <p class="text-muted">Completa el formulario y nos pondremos en contacto contigo</p>
-                        </div>
-                        
-                        <!-- Campo honeypot (oculto para bots) -->
-                        <input type="text" name="website" style="display:none;" tabindex="-1" autocomplete="off">
-                        
-                        <!-- Token CSRF -->
-                        <input type="hidden" name="form_token" id="form_token" value="">
-                        
-                        <div class="row g-4">
-                            <div class="col-md-6">
-                                <label for="nombre" class="form-label fw-semibold">Nombre Completo *</label>
-                                <input type="text" id="nombre" name="nombre" class="form-control form-control-lg" placeholder="Tu nombre completo" required minlength="2" maxlength="100">
-                            </div>
-                            <div class="col-md-6">
-                                <label for="email" class="form-label fw-semibold">Email *</label>
-                                <input type="email" id="email" name="email" class="form-control form-control-lg" placeholder="tu@email.com" required maxlength="100">
-                            </div>
-                            <div class="col-12">
-                                <label for="mensaje" class="form-label fw-semibold">Descripción del Mensaje *</label>
-                                <textarea id="mensaje" name="mensaje" rows="5" class="form-control" placeholder="Describe tu consulta: ¿Necesitas reparación? ¿Buscas un equipo específico? ¿Quieres armar una PC personalizada? Cuéntanos todos los detalles..." required minlength="10" maxlength="1000"></textarea>
-                            </div>
-                            <div class="col-12 d-grid">
-                                <button type="submit" class="btn btn-primary btn-lg py-3" id="submitBtn">
-                                    <i class="ri-send-plane-fill me-2"></i>
-                                    <span class="btn-text">Enviar Consulta</span>
-                                    <span class="spinner-border spinner-border-sm d-none" role="status"></span>
-                                </button>
-                            </div>
-                            <div class="col-12">
-                                <div id="formMessage" class="alert d-none" role="alert"></div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                
-                <!-- INFORMACIÓN DE CONTACTO -->
-                <!-- 
-                ===== GUÍA: SECCIÓN DE CONTACTO CON SEGURIDAD =====
-                Esta sección implementa:
-                1. Mini mapa interactivo con coordenadas ofuscadas
-                2. Información protegida con técnicas de ofuscación
-                3. Sistema de contacto seguro sin exposición directa de datos
-                -->
-                <div class="col-lg-4">
-                    <div class="contact-info-section p-4 h-100">
-                        <h4 class="text-white fw-bold mb-4">Información de Contacto</h4>
-                        
-                        <!-- DIRECCIÓN PÚBLICA - Solo área general -->
-                        <div class="contact-item d-flex align-items-start mb-4">
-                            <div class="contact-icon me-3">
-                                <i class="ri-map-pin-line"></i>
-                            </div>
-                            <div class="contact-details">
-                                <h6 class="text-white fw-semibold mb-1">Área de Servicio</h6>
-                                <!-- SEGURIDAD: Solo mostramos zona general, no dirección exacta -->
-                                <p class="text-light mb-0 small">Aldo Bonzi, La Matanza, Buenos Aires</p>
-                            </div>
-                        </div>
-
-                        <!-- MINI MAPA INTERACTIVO -->
-                        <!-- 
-                        GUÍA: Este mapa usa coordenadas aproximadas por seguridad
-                        - No muestra ubicación exacta del negocio
-                        - Usa OpenStreetMap para evitar dependencias de Google
-                        - Implementa lazy loading para mejor performance
-                        -->
-                        <div class="contact-item mb-4">
-                            <div class="mini-map-container">
-                                <h6 class="text-white fw-semibold mb-2">
-                                    <i class="ri-map-2-line me-2"></i>
-                                    Zona de Servicio
-                                </h6>
-                                <!-- Contenedor del mapa con coordenadas ofuscadas -->
-                                <div id="contact-map" class="mini-map" 
-                                     data-lat="-34.7078" 
-                                     data-lng="-58.5181" 
-                                     data-zoom="16">
-                                    <!-- Fallback para cuando JS está deshabilitado -->
-                                    <div class="map-fallback">
-                                        <i class="ri-map-pin-line"></i>
-                                        <p class="text-light small mb-0">Aldo Bonzi, Buenos Aires</p>
-                                        <small class="text-muted">Habilita JavaScript para ver el mapa</small>
-                                    </div>
+                        <div class="product-body">
+                            <span class="product-category">Oficina / Hogar</span>
+                            <h4 class="product-name">PC Dell - HP - LENOVO</h4>
+                            <div class="specs-grid-new">
+                                <div class="spec-row-new">
+                                    <span class="spec-key-new"><i class="ri-cpu-line"></i> Procesador</span>
+                                    <span class="spec-val-new">Intel i5 2da/3ra Generación</span>
+                                </div>
+                                <div class="spec-row-new">
+                                    <span class="spec-key-new"><i class="ri-hard-drive-2-line"></i> RAM</span>
+                                    <span class="spec-val-new">16GB DDR3</span>
+                                </div>
+                                <div class="spec-row-new">
+                                    <span class="spec-key-new"><i class="ri-database-line"></i> Almacenamiento</span>
+                                    <span class="spec-val-new">500 GB HDD</span>
+                                </div>
+                                <div class="spec-row-new">
+                                    <span class="spec-key-new"><i class="ri-shield-check-line"></i> Garantía</span>
+                                    <span class="spec-val-new">3 meses</span>
                                 </div>
                             </div>
+                            <div class="product-price-area">
+                                <span class="price-old">$250.000</span>
+                                <span class="price-current">$210.000</span>
+                                <span class="discount-chip">-16%</span>
+                            </div>
+                            <a href="#contact" class="btn-consultar">
+                                <i class="ri-message-3-line me-2"></i>Solicitar Presupuesto
+                            </a>
                         </div>
-                        
-                        <!-- HORARIOS DE ATENCIÓN -->
-                        <div class="contact-item d-flex align-items-start mb-4">
-                            <div class="contact-icon me-3">
-                                <i class="ri-time-line"></i>
-                            </div>
-                            <div class="contact-details">
-                                <h6 class="text-white fw-semibold mb-1">Horarios de Atención</h6>
-                                <p class="text-light mb-1 small">Lunes a Viernes: 9:00 - 18:00 hs</p>
-                                <p class="text-light mb-0 small">Sábados: 9:00 - 14:00 hs</p>
-                            </div>
+                    </div>
+                </div>
+
+                <!-- PC Gaming Ryzen 5 -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="product-card-new">
+                        <div class="product-badge-wrap">
+                            <span class="badge bg-success fw-bold px-3 py-2 rounded-pill"><i class="ri-check-line me-1"></i>Disponible</span>
                         </div>
-                        
-                        <div class="contact-item">
-                            <div class="text-center">
-                                <i class="ri-tools-line text-primary fs-1 mb-3"></i>
-                                <h6 class="text-white fw-semibold mb-2">Servicio Profesional</h6>
-                                <p class="text-light small mb-0">Diagnóstico gratuito • Garantía 6 meses • Presupuesto sin compromiso</p>
+                        <div class="product-img-wrap">
+                            <img src="/assets/images/pclenovo.png" alt="PC Dell OptiPlex 7010">
+                        </div>
+                        <div class="product-body">
+                            <span class="product-category">Oficina / Hogar</span>
+                            <h4 class="product-name">PC Dell - HP - LENOVO</h4>
+                            <div class="specs-grid-new">
+                                <div class="spec-row-new">
+                                    <span class="spec-key-new"><i class="ri-cpu-line"></i> Procesador</span>
+                                    <span class="spec-val-new">Intel i5 2da/3ra Generación</span>
+                                </div>
+                                <div class="spec-row-new">
+                                    <span class="spec-key-new"><i class="ri-hard-drive-2-line"></i> RAM</span>
+                                    <span class="spec-val-new">16GB DDR3</span>
+                                </div>
+                                <div class="spec-row-new">
+                                    <span class="spec-key-new"><i class="ri-database-line"></i> Almacenamiento</span>
+                                    <span class="spec-val-new">248 GB SSD</span>
+                                </div>
+                                <div class="spec-row-new">
+                                    <span class="spec-key-new"><i class="ri-shield-check-line"></i> Garantía</span>
+                                    <span class="spec-val-new">3 meses</span>
+                                </div>
                             </div>
+                            <div class="product-price-area">
+                                <span class="price-current">$290.000</span>
+                            </div>
+                            <a href="#contact" class="btn-consultar">
+                                <i class="ri-message-3-line me-2"></i>Solicitar Presupuesto
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Monitor LG 24" -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="product-card-new">
+                        <div class="product-badge-wrap">
+                            <span class="badge bg-warning text-dark fw-bold px-3 py-2 rounded-pill"><i class="ri-fire-line me-1"></i>Oferta</span>
+                        </div>
+                        <div class="product-img-wrap">
+                            <img src="/assets/images/pcdell.png" alt="PC Dell - HP - LENOVO">
+                        </div>
+                        <div class="product-body">
+                            <span class="product-category">Oficina / Hogar</span>
+                            <h4 class="product-name">PC Dell - HP - LENOVO</h4>
+                            <div class="specs-grid-new">
+                                <div class="spec-row-new">
+                                    <span class="spec-key-new"><i class="ri-tv-line"></i> Procesador</span>
+                                    <span class="spec-val-new">Intel Core i5 4ta Generación</span>
+                                </div>
+                                <div class="spec-row-new">
+                                    <span class="spec-key-new"><i class="ri-refresh-line"></i> RAM</span>
+                                    <span class="spec-val-new">16 GB DDR3</span>
+                                </div>
+                                <div class="spec-row-new">
+                                    <span class="spec-key-new"><i class="ri-hd-line"></i> Almacenamiento</span>
+                                    <span class="spec-val-new">500 GB HDD</span>
+                                </div>
+                                <div class="spec-row-new">
+                                    <span class="spec-key-new"><i class="ri-hdmi-line"></i> Garantía</span>
+                                    <span class="spec-val-new">3 meses</span>
+                                </div>
+                            </div>
+                            <div class="product-price-area">
+                                <!-- <span class="price-old">$220,000</span> -->
+                                <span class="price-current">$250.000</span>
+                                <!-- <span class="discount-chip">-18%</span> -->
+                            </div>
+                            <a href="#contact" class="btn-consultar">
+                                <i class="ri-message-3-line me-2"></i>Solicitar Presupuesto
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEGUNDA FILA DE PRODUCTOS -->
+            <div class="row g-4 justify-content-center mt-2">
+
+                <!-- Notebook Lenovo ThinkPad -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="product-card-new">
+                        <div class="product-badge-wrap">
+                            <span class="badge bg-info text-white fw-bold px-3 py-2 rounded-pill"><i class="ri-star-line me-1"></i>Recomendado</span>
+                        </div>
+                        <div class="product-img-wrap">
+                            <img src="/assets/images/pclenovo.png" alt="Lenovo ThinkPad">
+                        </div>
+                        <div class="product-body">
+                            <span class="product-category">Oficina / Hogar</span>
+                            <h4 class="product-name">PC Dell - HP - LENOVO</h4>
+                            <div class="specs-grid-new">
+                                <div class="spec-row-new">
+                                    <span class="spec-key-new"><i class="ri-cpu-line"></i> Procesador</span>
+                                    <span class="spec-val-new">Intel i5 2da/3ra Generación</span>
+                                </div>
+                                <div class="spec-row-new">
+                                    <span class="spec-key-new"><i class="ri-hard-drive-2-line"></i> RAM</span>
+                                    <span class="spec-val-new">8GB DDR3</span>
+                                </div>
+                                <div class="spec-row-new">
+                                    <span class="spec-key-new"><i class="ri-database-line"></i> Almacenamiento</span>
+                                    <span class="spec-val-new">500 GB HDD</span>
+                                </div>
+                                <div class="spec-row-new">
+                                    <span class="spec-key-new"><i class="ri-computer-line"></i> Garantía</span>
+                                    <span class="spec-val-new">3 meses</span>
+                                </div>
+                            </div>
+                            <div class="product-price-area">
+                                <!-- <span class="price-old">$780,000</span> -->
+                                <span class="price-current">$180.000</span>
+                                <!-- <span class="discount-chip">-17%</span> -->
+                            </div>
+                            <a href="#contact" class="btn-consultar">
+                                <i class="ri-message-3-line me-2"></i>Solicitar Presupuesto
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Kit Gaming RGB -->
+                <!-- <div class="col-lg-4 col-md-6">
+                    <div class="product-card-new">
+                        <div class="product-badge-wrap">
+                            <span class="badge bg-primary text-white fw-bold px-3 py-2 rounded-pill"><i class="ri-gift-line me-1"></i>Combo</span>
+                        </div>
+                        <div class="product-img-wrap">
+                            <img src="https://images.unsplash.com/photo-1580052614034-c55d20bfee3b?w=600&h=400&fit=crop" alt="Kit Gaming RGB">
+                        </div>
+                        <div class="product-body">
+                            <span class="product-category">Accesorios</span>
+                            <h4 class="product-name">Kit Gaming RGB (Teclado + Mouse)</h4>
+                            <div class="specs-grid-new">
+                                <div class="spec-row-new">
+                                    <span class="spec-key-new"><i class="ri-keyboard-line"></i> Teclado</span>
+                                    <span class="spec-val-new">Mecánico RGB</span>
+                                </div>
+                                <div class="spec-row-new">
+                                    <span class="spec-key-new"><i class="ri-cursor-line"></i> Mouse</span>
+                                    <span class="spec-val-new">Gaming 6400 DPI</span>
+                                </div>
+                                <div class="spec-row-new">
+                                    <span class="spec-key-new"><i class="ri-lightbulb-line"></i> Iluminación</span>
+                                    <span class="spec-val-new">RGB ajustable</span>
+                                </div>
+                                <div class="spec-row-new">
+                                    <span class="spec-key-new"><i class="ri-shield-check-line"></i> Garantía</span>
+                                    <span class="spec-val-new">1 año</span>
+                                </div>
+                            </div>
+                            <div class="product-price-area">
+                                <span class="price-old">$65,000</span>
+                                <span class="price-current">$45,000</span>
+                                <span class="discount-chip">-31%</span>
+                            </div>
+                            <a href="#contact" class="btn-consultar">
+                                <i class="ri-message-3-line me-2"></i>Solicitar Presupuesto
+                            </a>
+                        </div>
+                    </div>
+                </div> -->
+
+                <!-- SSD Kingston 480GB -->
+                <!-- <div class="col-lg-4 col-md-6">
+                    <div class="product-card-new">
+                        <div class="product-badge-wrap">
+                            <span class="badge bg-success text-white fw-bold px-3 py-2 rounded-pill"><i class="ri-rocket-line me-1"></i>Alta Velocidad</span>
+                        </div>
+                        <div class="product-img-wrap">
+                            <img src="https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?w=600&h=400&fit=crop" alt="SSD Kingston 480GB">
+                        </div>
+                        <div class="product-body">
+                            <span class="product-category">Componentes</span>
+                            <h4 class="product-name">SSD Kingston 480GB</h4>
+                            <div class="specs-grid-new">
+                                <div class="spec-row-new">
+                                    <span class="spec-key-new"><i class="ri-database-line"></i> Capacidad</span>
+                                    <span class="spec-val-new">480GB</span>
+                                </div>
+                                <div class="spec-row-new">
+                                    <span class="spec-key-new"><i class="ri-speed-line"></i> Interfaz</span>
+                                    <span class="spec-val-new">SATA III 6Gb/s</span>
+                                </div>
+                                <div class="spec-row-new">
+                                    <span class="spec-key-new"><i class="ri-dashboard-line"></i> Lectura</span>
+                                    <span class="spec-val-new">500 MB/s</span>
+                                </div>
+                                <div class="spec-row-new">
+                                    <span class="spec-key-new"><i class="ri-shield-check-line"></i> Garantía</span>
+                                    <span class="spec-val-new">3 años</span>
+                                </div>
+                            </div>
+                            <div class="product-price-area">
+                                <span class="price-old">$70,000</span>
+                                <span class="price-current">$55,000</span>
+                                <span class="discount-chip">-21%</span>
+                            </div>
+                            <a href="#contact" class="btn-consultar">
+                                <i class="ri-message-3-line me-2"></i>Solicitar Presupuesto
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+
+            <!-- CTA AGREGAR EQUIPO -->
+            <div class="row mt-5">
+                <div class="col-12 text-center">
+                    <div style="background: rgba(255,255,255,0.04); border: 1px dashed rgba(96,165,250,0.35); border-radius: 1.5rem; padding: 2.5rem 2rem;">
+                        <i class="ri-add-circle-line text-primary mb-3" style="font-size: 2.5rem;"></i>
+                        <h4 class="text-white fw-bold mb-2">¿No encontrás lo que buscás?</h4>
+                        <p class="text-white-50 mb-4">Consultanos por cualquier equipo, componente o accesorio. También armamos PCs personalizadas a medida según tu presupuesto.</p>
+                        <a href="#contact" class="btn btn-primary btn-lg px-5 py-3 rounded-pill fw-bold shadow-lg" style="background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%); border: none; box-shadow: 0 0 25px rgba(37,99,235,0.3);">
+                            <i class="ri-tools-line me-2"></i>Consultar Equipo Personalizado
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SERVICIOS -->
+    <section id="services" class="section-padding">
+        <div class="container">
+            <div class="text-center mb-5 reveal">
+                <span class="section-label">Lo que hacemos</span>
+                <h2 class="display-5 fw-bold text-white mt-2">Nuestros Servicios</h2>
+                <div class="section-divider"></div>
+                <p style="color:rgba(255,255,255,0.5);max-width:560px;margin:0 auto;">Soluciones integrales de informática con la mejor calidad y garantía del mercado.</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6 reveal reveal-d1">
+                    <div class="service-card">
+                        <div class="service-icon"><i class="ri-computer-line"></i></div>
+                        <h5>Reparación de PCs</h5>
+                        <p>Diagnóstico y reparación completa de computadoras de escritorio y laptops con garantía escrita.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 reveal reveal-d2">
+                    <div class="service-card">
+                        <div class="service-icon"><i class="ri-tv-2-line"></i></div>
+                        <h5>Reparación de Monitores</h5>
+                        <p>Servicio especializado en reparación de monitores LCD, LED y gaming.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 reveal reveal-d3">
+                    <div class="service-card">
+                        <div class="service-icon"><i class="ri-recycle-line"></i></div>
+                        <h5>Equipos Remanufacturados</h5>
+                        <p>PCs y laptops reacondicionados con garantía. Perfectos para oficina, estudio y uso doméstico a buen precio.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 reveal reveal-d1">
+                    <div class="service-card">
+                        <div class="service-icon"><i class="ri-settings-3-line"></i></div>
+                        <h5>Armado de PCs</h5>
+                        <p>Computadoras nuevas armadas bajo pedido según tus necesidades: gaming, oficina o diseño.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 reveal reveal-d2">
+                    <div class="service-card">
+                        <div class="service-icon"><i class="ri-tools-line"></i></div>
+                        <h5>Mantenimiento</h5>
+                        <p>Mantenimiento preventivo y correctivo para hogares y empresas. Limpieza, actualización de software y más.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 reveal reveal-d3">
+                    <div class="service-card">
+                        <div class="service-icon"><i class="ri-arrow-up-circle-line"></i></div>
+                        <h5>Upgrades de Hardware</h5>
+                        <p>Actualizaciones de RAM, discos SSD, tarjetas gráficas y procesadores para darle nueva vida a tu equipo.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NOSOTROS -->
+    <section id="about" class="section-padding">
+        <div class="container">
+            <div class="row align-items-center g-5">
+                <div class="col-lg-5 reveal">
+                    <div class="about-img-wrap">
+                        <img src="https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=700&h=560&fit=crop&crop=center" alt="Taller Only Comp">
+                    </div>
+                </div>
+                <div class="col-lg-7 reveal">
+                    <span class="section-label">Quiénes somos</span>
+                    <h2 class="display-5 fw-bold text-white mt-2 mb-2">Tu taller de confianza<br><span class="text-gradient">en Buenos Aires</span></h2>
+                    <div class="section-divider left"></div>
+                    <p style="color:rgba(255,255,255,0.52);line-height:1.82;margin-bottom:2rem;">
+                        En Only Comp somos especialistas en informática con más de 10 años de experiencia. Trabajamos con pasión para ofrecer soluciones tecnológicas reales a personas y empresas.
+                    </p>
+                    <div class="row g-3 mb-4">
+                        <div class="col-6"><div class="about-stat"><div class="num">+10</div><div class="lbl">Años de experiencia</div></div></div>
+                        <div class="col-6"><div class="about-stat"><div class="num">500+</div><div class="lbl">Equipos reparados</div></div></div>
+                        <div class="col-6"><div class="about-stat"><div class="num">3m</div><div class="lbl">Garantía en reparaciones</div></div></div>
+                        <div class="col-6"><div class="about-stat"><div class="num">100%</div><div class="lbl">Satisfacción del cliente</div></div></div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><i class="ri-tools-fill"></i></div>
+                        <div>
+                            <h6>Reparación Especializada</h6>
+                            <p>Diagnóstico y reparación de computadoras, laptops y monitores con garantía escrita incluida.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><i class="ri-recycle-fill"></i></div>
+                        <div>
+                            <h6>Equipos Remanufacturados</h6>
+                            <p>PCs y laptops reacondicionados con garantía, ideales para oficina y uso doméstico.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><i class="ri-settings-3-fill"></i></div>
+                        <div>
+                            <h6>Armado Personalizado</h6>
+                            <p>PCs nuevas armadas bajo pedido para gaming, trabajo profesional y todo tipo de uso.</p>
                         </div>
                     </div>
                 </div>
@@ -700,429 +1062,377 @@
         </div>
     </section>
 
-    <!-- DIVIDER LINE -->
-    <!-- TRAINEE NOTE: Línea divisoria simple entre contacto y footer -->
-    <div class="border-top border-light" style="border-width: 2px !important;"></div>
-
-    <!-- 
-    ===== FOOTER PROFESIONAL =====
-    GUÍA DE DESARROLLO:
-    
-    🏢 PROPÓSITO: Información corporativa y enlaces útiles
-    📋 ESTRUCTURA: 2 columnas - info empresa + servicios
-    🔗 NAVEGACIÓN: Links internos para mejor UX
-    
-    🎨 DISEÑO TÉCNICO:
-    - bg-dark: Fondo oscuro para contraste
-    - gy-5: Gutters verticales Bootstrap
-    - justify-content-between: Distribución equilibrada
-    
-    🛡️ ELEMENTOS DE SEGURIDAD:
-    - Notificación de contacto seguro
-    - Iconografía de seguridad (shield)
-    - Links internos sin exposición de datos
-    
-    📱 RESPONSIVE:
-    - col-lg-6: 50% en desktop
-    - col-md-8: 66% en tablets
-    - Stack en móviles
-    -->
-    <footer class="bg-dark">
-        <div class="footer-top">
-            <div class="container">
-                <!-- Grid de 2 columnas con espaciado vertical -->
-                <div class="row gy-5 justify-content-between">
-                    <!-- Columna de información corporativa -->
-                    <div class="col-lg-6 col-md-8">
-                        <h3 class="text-white fw-bold mb-3">Outlet Tech</h3>
-                        <div class="line"></div> <!-- Elemento decorativo -->
-                        <p class="text-light mb-4">Tu taller informático de confianza en Buenos Aires. Reparación, equipos remanufacturados y PCs a medida con garantía.</p>
-                        <!-- Notificación de seguridad -->
-                        <div class="security-notice">
-                            <small class="text-muted">
-                                <i class="ri-shield-line me-1"></i> <!-- Icono de seguridad -->
-                                Contacto seguro disponible mediante formulario y WhatsApp protegido
-                            </small>
-                        </div>
+    <!-- CONTACTO -->
+    <section id="contact" class="section-padding">
+        <div class="container position-relative" style="z-index:1;">
+            <div class="text-center mb-5 reveal">
+                <span class="section-label">Hablemos</span>
+                <h2 class="display-5 fw-bold text-white mt-2">Contactanos</h2>
+                <div class="section-divider"></div>
+                <p style="color:rgba(255,255,255,0.5);max-width:520px;margin:0 auto;">¿Necesitás reparar tu PC, querés un equipo remanufacturado o armarte una máquina a medida? ¡Estamos para ayudarte!</p>
+            </div>
+            <div class="row g-4 align-items-start">
+                <div class="col-lg-7 reveal reveal-d1">
+                    <div class="contact-form-wrap">
+                        <h4 class="text-white fw-bold mb-1">Solicitá tu Presupuesto</h4>
+                        <p style="color:rgba(255,255,255,0.38);font-size:0.875rem;margin-bottom:2rem;">Completá el formulario y nos comunicamos a la brevedad.</p>
+                        <form id="contactForm" novalidate>
+                            <!-- Campo CSRF Token (oculto) -->
+                            <input type="hidden" name="form_token" id="form_token">
+                            <!-- Campo Honeypot anti-bot (oculto) -->
+                            <input type="text" name="website" id="website" style="display:none;" tabindex="-1" autocomplete="off">
+                            
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="nombre">Nombre Completo *</label>
+                                    <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Tu nombre" required minlength="2" maxlength="100">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="email">Email *</label>
+                                    <input type="email" id="email" name="email" class="form-control" placeholder="tu@email.com" required maxlength="100">
+                                </div>
+                                <div class="col-12">
+                                    <label for="telefono">Teléfono / WhatsApp</label>
+                                    <input type="tel" id="telefono" name="telefono" class="form-control" placeholder="11 2345-6789" maxlength="30">
+                                </div>
+                                <div class="col-12">
+                                    <label for="mensaje">Descripción *</label>
+                                    <textarea id="mensaje" name="mensaje" rows="5" class="form-control" placeholder="Contanos qué necesitás: ¿reparación, presupuesto, equipo a medida? Cuantos más detalles, mejor." required minlength="10" maxlength="1000"></textarea>
+                                </div>
+                                <div class="col-12">
+                                    <button type="submit" class="btn-enviar" id="submitBtn">
+                                        <span class="btn-text"><i class="ri-send-plane-fill me-2"></i>Enviar Consulta</span>
+                                        <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                                    </button>
+                                </div>
+                                <div class="col-12 d-none" id="formMessage"></div>
+                            </div>
+                        </form>
                     </div>
-                    <div class="col-lg-4 col-md-4">
-                        <h5 class="mb-3 text-white">SERVICIOS</h5>
-                        <div class="line"></div>
-                        <ul class="list-unstyled">
-                            <li class="mb-2"><a href="#services" class="text-light text-decoration-none hover-link">Reparación de PCs</a></li>
-                            <li class="mb-2"><a href="#services" class="text-light text-decoration-none hover-link">Reparación de Monitores</a></li>
-                            <li class="mb-2"><a href="#services" class="text-light text-decoration-none hover-link">Equipos Remanufacturados</a></li>
-                            <li class="mb-2"><a href="#services" class="text-light text-decoration-none hover-link">Armado de PCs</a></li>
-                            <li class="mb-2"><a href="#services" class="text-light text-decoration-none hover-link">Soporte Técnico</a></li>
-                        </ul>
+                </div>
+                <div class="col-lg-5 reveal reveal-d2">
+                    <div class="contact-info-card">
+                        <h5 class="text-white fw-bold mb-1">Información de Contacto</h5>
+                        <p style="color:rgba(255,255,255,0.35);font-size:0.8rem;margin-bottom:1rem;">Respondemos a la brevedad en horario de atención.</p>
+                        <div class="contact-info-item">
+                            <div class="contact-info-icon"><i class="ri-map-pin-line"></i></div>
+                            <div>
+                                <h6>Ubicación</h6>
+                                <p>Aldo Bonzi, La Matanza<br>Buenos Aires, Argentina</p>
+                            </div>
+                        </div>
+                        <div class="contact-info-item">
+                            <div class="contact-info-icon"><i class="ri-time-line"></i></div>
+                            <div>
+                                <h6>Horarios de Atención</h6>
+                                <p>Lunes a Viernes: 9:00 – 18:00 hs<br>Sábados: 9:00 – 14:00 hs</p>
+                            </div>
+                        </div>
+
+                        <div class="contact-trust">
+                            <i class="ri-shield-check-fill d-block mb-2" style="color:#10b981;font-size:1.5rem;"></i>
+                            <p style="color:rgba(255,255,255,0.4);font-size:0.78rem;margin:0;">Diagnóstico gratuito · Garantía 3 meses · Presupuesto sin compromiso</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="footer-bottom">
-            <div class="container">
-                <div class="row g-4 justify-content-center">
-                    <div class="col-auto">
-                        <p class="mb-0 text-light">© 2025 Outlet Tech Argentina. Todos los derechos reservados.</p>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="pt-5 pb-4">
+        <div class="container">
+            <div class="row gy-4 justify-content-between">
+                <div class="col-lg-4 col-md-6">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <img src="./assets/images/circular-logo.png" alt="Only Comp" style="width:36px;height:36px;border-radius:50%;object-fit:cover;">
+                        <h5 class="text-white fw-bold mb-0"><span class="text-gradient">Only</span> Comp</h5>
+                    </div>
+                    <p style="color:rgba(255,255,255,0.38);font-size:0.875rem;max-width:320px;line-height:1.75;">
+                        Tu taller informático de confianza en Buenos Aires. Especialistas en reparación, equipos remanufacturados y armado de PCs a medida.
+                    </p>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h6 class="text-white fw-bold mb-3">Servicios</h6>
+                    <ul class="list-unstyled d-flex flex-column gap-2">
+                        <li><a href="#services" class="footer-link"><i class="ri-arrow-right-s-line me-1 text-primary"></i>Reparación de PCs</a></li>
+                        <li><a href="#services" class="footer-link"><i class="ri-arrow-right-s-line me-1 text-primary"></i>Equipos Remanufacturados</a></li>
+                        <li><a href="#services" class="footer-link"><i class="ri-arrow-right-s-line me-1 text-primary"></i>Armado Gaming</a></li>
+                        <li><a href="#contact" class="footer-link"><i class="ri-arrow-right-s-line me-1 text-primary"></i>Soporte Técnico</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h6 class="text-white fw-bold mb-3">Contacto</h6>
+                    <ul class="list-unstyled d-flex flex-column gap-3">
+                        <li class="d-flex gap-2 align-items-start" style="color:rgba(255,255,255,0.38);font-size:0.875rem;">
+                            <i class="ri-map-pin-line text-primary mt-1"></i>Aldo Bonzi, La Matanza<br>Buenos Aires
+                        </li>
+
+                        <li class="d-flex gap-2" style="color:rgba(255,255,255,0.38);font-size:0.875rem;">
+                            <i class="ri-time-line text-primary"></i>Lun–Vie 9:00–18:00 hs
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <hr style="border-color:rgba(255,255,255,0.07);margin:2.5rem 0 1.5rem;">
+            <div class="row align-items-center">
+                <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                    <p style="color:rgba(255,255,255,0.22);font-size:0.8rem;margin:0;">© 2026 Only Comp. Todos los derechos reservados.</p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <div class="d-flex justify-content-center justify-content-md-end gap-3">
+                        <a href="#" class="social-icon" aria-label="Instagram"><i class="ri-instagram-line"></i></a>
+                        <a href="#" class="social-icon" aria-label="Facebook"><i class="ri-facebook-circle-line"></i></a>
+                        <a href="#" class="social-icon" id="waFooter" aria-label="WhatsApp"><i class="ri-whatsapp-line"></i></a>
                     </div>
                 </div>
             </div>
         </div>
     </footer>
 
-
-
-
-
-    <!-- 
-    ===== BOTÓN FLOTANTE WHATSAPP PROTEGIDO =====
-    GUÍA: Este botón ya no contiene el número directamente por seguridad
-    El número se obtiene a través del sistema de seguridad después de verificación
-    -->
-    <a href="#" class="whatsapp-float" id="secure-whatsapp-float" aria-label="Contactar por WhatsApp">
+    <!-- WhatsApp Flotante -->
+    <a href="#" class="whatsapp-float" id="waFloat" target="_blank" rel="noopener noreferrer" aria-label="Contactar por WhatsApp">
         <i class="ri-whatsapp-fill"></i>
-        <!-- Indicador de seguridad (opcional) -->
-        <span class="security-badge">
-            <i class="ri-shield-check-line"></i>
-        </span>
     </a>
 
-    <!-- 
-    ===== SCRIPTS DE TERCEROS =====
-    GUÍA: Cargamos librerías externas primero para dependencias
-    -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-    
-    <!-- SCRIPT PARA NAVEGACIÓN FUNCIONAL Y ANIMACIONES GSAP -->
+    <!-- SCRIPTS -->
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
     <script>
-        // Registrar plugins de GSAP
-        gsap.registerPlugin(ScrollTrigger);
+    (function() {
+        'use strict';
+
+        // NAVBAR: fixed en el top, transparente sobre el hero, fondo solido en el resto.
+        // Detecta cuando el borde inferior del hero sale del viewport.
+        var navbar = document.getElementById('mainNavbar');
+        var heroSection = document.getElementById('hero');
+        function onScroll() {
+            if (!navbar || !heroSection) return;
+            var heroBottom = heroSection.getBoundingClientRect().bottom;
+            if (heroBottom <= 0) {
+                navbar.classList.add('navbar-solid');
+            } else {
+                navbar.classList.remove('navbar-solid');
+            }
+        }
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+
+        // SMOOTH SCROLL al hacer clic en links del navbar
+        // Usa document.scrollingElement para compatibilidad cross-browser:
+        // overflow-x:hidden en body hace que en Firefox el scroll container
+        // sea body y no window, por lo que window.scrollTo() no funciona.
+        // document.scrollingElement siempre devuelve el elemento correcto.
+        document.addEventListener('click', function(e) {
+            var link = e.target.closest('a[href^="#"]');
+            if (!link) return;
+            var id = link.getAttribute('href').slice(1);
+            if (!id) return;
+            var target = document.getElementById(id);
+            if (!target) return;
+            e.preventDefault();
+            var navH = navbar ? navbar.offsetHeight : 80;
+            var targetTop = target.getBoundingClientRect().top + window.scrollY - navH;
+            var scroller = document.scrollingElement || document.documentElement;
+            scroller.scrollTo({ top: targetTop, behavior: 'smooth' });
+            // Actualizar activo de inmediato (sin esperar el evento scroll)
+            document.querySelectorAll('.nav-link').forEach(function(lnk) {
+                lnk.classList.toggle('active', lnk.getAttribute('href') === '#' + id);
+            });
+            // Cerrar menu movil si esta abierto
+            var collapse = document.getElementById('navbarNav');
+            if (collapse && collapse.classList.contains('show')) {
+                var bsCollapse = bootstrap.Collapse.getInstance(collapse);
+                if (bsCollapse) bsCollapse.hide();
+            }
+        });
+
+        // SCROLL SPY — resalta el item del navbar segun la seccion visible.
+        // getBoundingClientRect().top cambia en tiempo real con el scroll.
+        // Una seccion esta «activa» cuando su top <= (altura navbar + 20px buffer).
+        // Recorremos en orden → la ultima que cumple la condicion gana
+        // (siempre es la seccion mas abajo que ya entro en pantalla).
+        var spyIds = ['hero', 'productos', 'services', 'about', 'contact'];
+        function updateSpy() {
+            var navH = navbar ? navbar.offsetHeight : 80;
+            var trigger = navH + 20;
+            var active = spyIds[0];
+            spyIds.forEach(function(id) {
+                var el = document.getElementById(id);
+                if (!el) return;
+                if (el.getBoundingClientRect().top <= trigger) active = id;
+            });
+            document.querySelectorAll('.nav-link').forEach(function(link) {
+                link.classList.toggle('active', link.getAttribute('href') === '#' + active);
+            });
+        }
+        window.addEventListener('scroll', updateSpy, { passive: true });
+        updateSpy();
         
-        // Función para scroll suave sin dependencias externas
-        function scrollToSection(sectionId) {
-            const element = document.getElementById(sectionId);
-            if (element) {
-                const offsetTop = element.offsetTop - 70;
-                // Usar scrollTo nativo del navegador con animación GSAP
-                gsap.to(window, {
-                    duration: 1.2,
-                    scrollTo: offsetTop,
-                    ease: "power3.inOut"
+        // WhatsApp flotante - mostrar al llegar a contacto
+        function initWhatsApp() {
+            var whatsappBtn = document.querySelector('.whatsapp-float');
+            var contactSection = document.getElementById('contact');
+            if (!whatsappBtn || !contactSection) return;
+            
+            function checkWhatsApp() {
+                var contactRect = contactSection.getBoundingClientRect();
+                var windowHeight = window.innerHeight;
+                
+                // Mostrar WhatsApp cuando la sección de contacto está visible
+                // Se activa cuando la sección está dentro del viewport (con 200px de margen)
+                if (contactRect.top < windowHeight - 200) {
+                    whatsappBtn.classList.add('show');
+                } else {
+                    whatsappBtn.classList.remove('show');
+                }
+            }
+            
+            window.addEventListener('scroll', checkWhatsApp, { passive: true });
+            checkWhatsApp(); // Check inicial
+        }
+
+        // Reveal on scroll
+        function initReveal() {
+            if (!('IntersectionObserver' in window)) {
+                document.querySelectorAll('.reveal').forEach(function(el) { el.classList.add('visible'); });
+                return;
+            }
+            var obs = new IntersectionObserver(function(entries) {
+                entries.forEach(function(e) {
+                    if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
                 });
+            }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+            document.querySelectorAll('.reveal').forEach(function(el) { obs.observe(el); });
+        }
+
+        // Contact form
+        function initForm() {
+            var form = document.getElementById('contactForm');
+            var msgDiv = document.getElementById('formMessage');
+            if (!form) return;
+            
+            // Generar token CSRF
+            var tokenInput = document.getElementById('form_token');
+            if (tokenInput) {
+                tokenInput.value = Math.random().toString(36).substring(2) + Date.now().toString(36);
+            }
+            
+            // Registrar tiempo de inicio
+            sessionStorage.setItem('form_start_time', Date.now());
+            
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Verificar tiempo mínimo (protección contra bots)
+                var startTime = sessionStorage.getItem('form_start_time');
+                if (startTime && (Date.now() - parseInt(startTime)) < 3000) {
+                    showMsg('Por favor, tómate unos segundos más para completar el formulario.', 'danger');
+                    return;
+                }
+                
+                var nombre = (document.getElementById('nombre').value || '').trim();
+                var email  = (document.getElementById('email').value  || '').trim();
+                var msg    = (document.getElementById('mensaje').value || '').trim();
+                
+                // Validaciones básicas
+                if (!nombre || nombre.length < 2) {
+                    showMsg('El nombre debe tener al menos 2 caracteres.', 'danger');
+                    return;
+                }
+                
+                if (!email || !isValidEmail(email)) {
+                    showMsg('Por favor ingresa un email válido.', 'danger');
+                    return;
+                }
+                
+                if (!msg || msg.length < 10) {
+                    showMsg('El mensaje debe tener al menos 10 caracteres.', 'danger');
+                    return;
+                }
+                
+                var btn = document.getElementById('submitBtn');
+                var btnText = btn.querySelector('.btn-text');
+                var btnSpinner = btn.querySelector('.spinner-border');
+                
+                // Estado de carga
+                btn.disabled = true;
+                if (btnText) btnText.classList.add('d-none');
+                if (btnSpinner) btnSpinner.classList.remove('d-none');
+                
+                // Enviar formulario via AJAX
+                var formData = new FormData(form);
+                
+                fetch('enviar.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(function(response) {
+                    return response.json();
+                })
+                .then(function(data) {
+                    if (data.success) {
+                        showMsg(data.message || '¡Gracias! Tu consulta fue recibida. Te contactamos a la brevedad.', 'success');
+                        form.reset();
+                        // Generar nuevo token
+                        if (tokenInput) {
+                            tokenInput.value = Math.random().toString(36).substring(2) + Date.now().toString(36);
+                        }
+                        sessionStorage.setItem('form_start_time', Date.now());
+                    } else {
+                        showMsg(data.message || 'Hubo un error al enviar el mensaje. Intenta nuevamente.', 'danger');
+                    }
+                })
+                .catch(function(error) {
+                    console.error('Error:', error);
+                    showMsg('Error de conexión. Por favor, inténtalo más tarde o contáctanos por WhatsApp.', 'danger');
+                })
+                .finally(function() {
+                    btn.disabled = false;
+                    if (btnText) btnText.classList.remove('d-none');
+                    if (btnSpinner) btnSpinner.classList.add('d-none');
+                });
+            });
+            
+            function isValidEmail(email) {
+                var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return emailRegex.test(email);
+            }
+            
+            function showMsg(text, type) {
+                msgDiv.className = 'alert alert-' + type;
+                msgDiv.textContent = text;
+                msgDiv.classList.remove('d-none');
+                
+                // Auto-ocultar después de 8 segundos
+                setTimeout(function() {
+                    msgDiv.classList.add('d-none');
+                }, 8000);
             }
         }
         
-        // Esperar a que cargue todo
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('🎯 Initializing navbar and GSAP animations');
-            
-            /* 
-            ===== SISTEMA DE DETECCIÓN DE NAVEGACIÓN MEJORADO =====
-            GUÍA DE DESARROLLO JAVASCRIPT:
-            
-            🎯 OBJETIVO: Transiciones suaves del navbar sin flash ni glitches
-            📊 TRIGGER: Scroll fuera del hero OR navegación activa
-            🔧 MÉTODO: IntersectionObserver + navegación tracking + transiciones optimizadas
-            
-            💡 OPTIMIZACIONES IMPLEMENTADAS:
-            - Preload class para evitar flash inicial
-            - RequestAnimationFrame para sincronización
-            - Debouncing para transiciones suaves
-            - GPU acceleration con will-change
-            */
-            
-            // PRELOAD OPTIMIZATION - Prevenir flash de transiciones
-            const navbar = document.getElementById('mainNavbar');
-            const heroSection = document.getElementById('hero');
-            let isOutsideHero = false;
-            let hasNavigated = false;
-            let transitionDebouncer = null;
-            
-            // Aplicar clase preload temporalmente
-            navbar.classList.add('navbar-preload');
-            
-            // Remover preload después de la inicialización
-            setTimeout(() => {
-                navbar.classList.remove('navbar-preload');
-            }, 100);
-            
-            // Función optimizada para transiciones suaves del navbar
-            function updateNavbarBackground() {
-                if (!navbar) return;
-                
-                // Cancelar transición anterior si existe
-                if (transitionDebouncer) {
-                    clearTimeout(transitionDebouncer);
-                }
-                
-                // Usar requestAnimationFrame para sincronización suave
-                requestAnimationFrame(() => {
-                    transitionDebouncer = setTimeout(() => {
-                        if (isOutsideHero || hasNavigated) {
-                            if (!navbar.classList.contains('navbar-scrolled')) {
-                                navbar.classList.add('navbar-scrolled');
-                                console.log('🎨 Navbar background: ACTIVATED');
-                            }
-                        } else {
-                            if (navbar.classList.contains('navbar-scrolled')) {
-                                navbar.classList.remove('navbar-scrolled');
-                                console.log('🎨 Navbar background: TRANSPARENT');
-                            }
-                        }
-                    }, 10); // Debounce suave de 10ms
-                });
-            }
-            
-            // Observer para detectar cuando salimos del hero
-            const heroObserver = new IntersectionObserver(function(entries) {
-                entries.forEach(function(entry) {
-                    // Si el hero NO está visible, activamos el fondo
-                    isOutsideHero = !entry.isIntersecting;
-                    updateNavbarBackground();
-                });
-            }, {
-                threshold: 0.1, // Activar cuando el 10% del hero sea visible
-                rootMargin: '-70px 0px 0px 0px' // Compensar altura del navbar
-            });
-            
-            // Observar el hero section
-            heroObserver.observe(heroSection);
-            
-            // Backup: detección por scroll tradicional
-            window.addEventListener('scroll', function() {
-                if (window.scrollY > 100) {
-                    isOutsideHero = true;
-                    updateNavbarBackground();
-                }
-            });
-            
-            // ANIMACIONES DE ENTRADA - HERO SECTION
-            gsap.from(".navbar", {duration: 1, y: -100, ease: "bounce.out"});
-            gsap.from("#hero h1", {duration: 1.5, opacity: 0, y: 50, delay: 0.5});
-            gsap.from("#hero h3", {duration: 1.5, opacity: 0, y: 30, delay: 0.8});
-            gsap.from("#hero .btn", {duration: 1, opacity: 0, scale: 0.8, delay: 1.2, stagger: 0.2});
-            gsap.from(".product-showcase", {duration: 0.8, opacity: 0, y: 30, delay: 1.5, stagger: 0.1});
-            
-            /* 
-            ===== SISTEMA DE ANIMACIONES GSAP =====
-            GUÍA TÉCNICA AVANZADA:
-            
-            🎬 FILOSOFÍA DE ANIMACIÓN:
-            - Animaciones sutiles y profesionales
-            - Triggered por scroll para mejor performance
-            - Stagger effects para elementos múltiples
-            - Easing curves naturales (power2.out)
-            
-            ⚡ OPTIMIZACIONES DE PERFORMANCE:
-            - ScrollTrigger para lazy loading de animaciones
-            - GPU acceleration con transform properties
-            - Duraciones optimizadas (0.8-1.5s)
-            - Stagger para evitar bloque visual
-            
-            🎯 TARGETS DE ANIMACIÓN:
-            - Títulos: fade-in desde abajo (y: 50)
-            - Cards/elementos: stagger con delays
-            - Imágenes: slide desde los lados
-            - Textos: fade-in progresivo
-            */
-            
-            // ANIMACIONES SCROLL-TRIGGERED PARA TODAS LAS SECCIONES
-            
-            // PRODUCTS SECTION - Animaciones de entrada
-            gsap.from("#portfolio .section-title", {
-                scrollTrigger: "#portfolio", // Trigger cuando la sección entra en vista
-                duration: 1, // 1 segundo de duración
-                opacity: 0, // Comienza invisible
-                y: 50, // Desliza desde 50px abajo
-                ease: "power2.out" // Curva de easing natural
-            });
-            gsap.from("#portfolio .product-card", {
-                scrollTrigger: "#portfolio",
-                duration: 0.8,
-                opacity: 0,
-                y: 50,
-                stagger: 0.2,
-                delay: 0.3,
-                ease: "power2.out"
-            });
-            
-            // SERVICES SECTION
-            gsap.from("#services .section-title", {
-                scrollTrigger: "#services",
-                duration: 1,
-                opacity: 0,
-                y: 50,
-                ease: "power2.out"
-            });
-            gsap.from("#services .service", {
-                scrollTrigger: "#services",
-                duration: 0.8,
-                opacity: 0,
-                y: 50,
-                stagger: 0.15,
-                delay: 0.3,
-                ease: "power2.out"
-            });
-            
-            // ABOUT SECTION
-            gsap.from("#about .section-title", {
-                scrollTrigger: "#about",
-                duration: 1,
-                opacity: 0,
-                y: 50,
-                ease: "power2.out"
-            });
-            gsap.from("#about .about-image", {
-                scrollTrigger: "#about",
-                duration: 1,
-                opacity: 0,
-                x: -100,
-                delay: 0.3,
-                ease: "power2.out"
-            });
-            gsap.from("#about h1, #about p, #about .d-flex", {
-                scrollTrigger: "#about",
-                duration: 0.8,
-                opacity: 0,
-                x: 100,
-                stagger: 0.2,
-                delay: 0.5,
-                ease: "power2.out"
-            });
-            
-            // CONTACT SECTION
-            gsap.from("#contact .section-title", {
-                scrollTrigger: "#contact",
-                duration: 1,
-                opacity: 0,
-                y: 50,
-                ease: "power2.out"
-            });
-            gsap.from("#contact .contact-form-section", {
-                scrollTrigger: "#contact",
-                duration: 1,
-                opacity: 0,
-                x: -50,
-                delay: 0.3,
-                ease: "power2.out"
-            });
-            gsap.from("#contact .contact-info-section", {
-                scrollTrigger: "#contact",
-                duration: 1,
-                opacity: 0,
-                x: 50,
-                delay: 0.5,
-                ease: "power2.out"
-            });
-            
-            // NAVEGACIÓN FUNCIONAL CON TRANSICIONES OPTIMIZADAS
-            const allNavLinks = document.querySelectorAll('a[href^="#"]');
-            
-            allNavLinks.forEach(function(link) {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    
-                    const targetId = this.getAttribute('href').substring(1);
-                    const targetElement = document.getElementById(targetId);
-                    console.log('🔗 Navigating to:', targetId);
-                    
-                    if (targetElement) {
-                        // Optimización de navegación con debounce
-                        if (transitionDebouncer) clearTimeout(transitionDebouncer);
-                        
-                        // Marcar navegación para activar fondo navbar
-                        if (targetId !== 'hero') {
-                            hasNavigated = true;
-                            updateNavbarBackground();
-                        } else {
-                            hasNavigated = false;
-                            updateNavbarBackground();
-                        }
-                        
-                        // Cerrar menú móvil si está abierto
-                        const navbarCollapse = document.getElementById('navbarNav');
-                        if (navbarCollapse && navbarCollapse.classList.contains('show')) {
-                            const bsCollapse = new bootstrap.Collapse(navbarCollapse);
-                            bsCollapse.hide();
-                        }
-                        
-                        // Método alternativo: smooth scroll nativo del navegador
-                        targetElement.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'start',
-                            inline: 'nearest'
-                        });
-                        
-                        // Ajustar offset después del scroll
-                        setTimeout(() => {
-                            window.scrollBy(0, -70);
-                        }, 500);
-                        
-                        // Actualizar navegación activa
-                        updateActiveNavigation(targetId);
-                    }
-                });
-            });
-            
-            // Función para actualizar navegación activa
-            function updateActiveNavigation(activeSection) {
-                document.querySelectorAll('.nav-link').forEach(function(link) {
-                    link.classList.remove('active');
-                    if (link.getAttribute('href') === '#' + activeSection) {
-                        link.classList.add('active');
-                    }
-                });
-            }
-            
-            // Scroll spy con IntersectionObserver (más eficiente) + navbar background control
-            const sections = document.querySelectorAll('section[id]');
-            const observerOptions = {
-                threshold: 0.3,
-                rootMargin: '-70px 0px -70px 0px'
-            };
-            
-            const observer = new IntersectionObserver(function(entries) {
-                entries.forEach(function(entry) {
-                    if (entry.isIntersecting) {
-                        const currentSection = entry.target.id;
-                        updateActiveNavigation(currentSection);
-                        
-                        // Control de fondo navbar basado en la sección activa
-                        if (currentSection === 'hero') {
-                            // En hero, solo activar fondo si hemos navegado manualmente
-                            if (!hasNavigated) {
-                                isOutsideHero = false;
-                            }
-                        } else {
-                            // En cualquier otra sección, activar fondo
-                            isOutsideHero = true;
-                            hasNavigated = true;
-                        }
-                        updateNavbarBackground();
-                    }
-                });
-            }, observerOptions);
-            
-            sections.forEach(function(section) {
-                observer.observe(section);
-            });
-            
-            // GSAP hover animations para vitrina de productos
-            document.querySelectorAll('.product-showcase').forEach(function(item) {
-                item.addEventListener('mouseenter', function() {
-                    gsap.to(this, {duration: 0.3, y: -10, scale: 1.05, ease: "power2.out"});
-                });
-                item.addEventListener('mouseleave', function() {
-                    gsap.to(this, {duration: 0.3, y: 0, scale: 1, ease: "power2.out"});
-                });
-            });
-        });
-    </script>
-    
-    <script src="./assets/js/security.js"></script>
-</body>
+        // Protección de contacto: datos NO están en el HTML, se decodifican desde JS
+        // Para cambiar el número de WhatsApp, reemplazá el valor de _wc con btoa('TU_NUMERO')
+        // Ejemplo: btoa('5491123456789') en la consola del navegador
+        function initContactProtection() {
+            try {
+                // Número de WhatsApp en base64 (no expuesto en HTML)
+                var _wc = 'KzU0OTExNjI2NjI3Njc=';
+                var waNum = atob(_wc);
+                var waUrl = 'https://wa.me/' + waNum;
+                var waFloat = document.getElementById('waFloat');
+                var waFooter = document.getElementById('waFooter');
+                if (waFloat) waFloat.href = waUrl;
+                if (waFooter) waFooter.href = waUrl;
+            } catch(e) { /* silencioso */ }
+        }
 
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', function() { initReveal(); initForm(); initWhatsApp(); initContactProtection(); });
+        } else {
+            initReveal(); initForm(); initWhatsApp(); initContactProtection();
+        }
+    })();
+    </script>
+</body>
 </html>

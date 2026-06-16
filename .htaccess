@@ -6,11 +6,6 @@
     Require all denied
 </FilesMatch>
 
-# Proteger directorio de logs
-<Directory "logs">
-    Require all denied
-</Directory>
-
 # Proteger archivos de configuración
 <Files "config.php">
     Require all denied
@@ -71,13 +66,6 @@
 <IfModule mod_fcgid.c>
     FcgidMaxRequestLen 1048576
 </IfModule>
-
-# Prevenir ejecución de scripts en directorios de uploads
-<Directory "assets">
-    <FilesMatch "\.php$">
-        Require all denied
-    </FilesMatch>
-</Directory>
 
 # Error 404 personalizado (opcional)
 # ErrorDocument 404 /404.html

@@ -1,0 +1,4 @@
+# Prevenir ejecución de scripts PHP en el directorio assets
+<FilesMatch "\.php$">
+    Require all denied
+</FilesMatch>

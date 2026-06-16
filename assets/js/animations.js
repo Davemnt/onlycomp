@@ -38,15 +38,18 @@ class OutletTechAnimations {
     }
 
     setupIntersectionObserver() {
-        // Configuración del observador principal
+        // Configuración optimizada del observador
         const options = {
             root: null,
-            rootMargin: '0px 0px -10% 0px', // Activar cuando el elemento esté 10% visible
-            threshold: [0.1, 0.3, 0.6] // Múltiples puntos de activación
+            rootMargin: '0px 0px -5% 0px', // Activar más temprano para transiciones suaves
+            threshold: 0.1 // Un solo threshold para mejor rendimiento
         };
 
         this.mainObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => this.handleIntersection(entry));
+            // Usar requestAnimationFrame para optimizar rendering
+            requestAnimationFrame(() => {
+                entries.forEach(entry => this.handleIntersection(entry));
+            });
         }, options);
 
         // Observar todos los elementos con clases de animación

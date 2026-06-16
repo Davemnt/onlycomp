@@ -1,0 +1,104 @@
+ <!-- 
+     ===== SECCIÓN PRODUCTOS =====
+     GUÍA DE DESARROLLO:
+     
+     🛒 OBJETIVO: Mostrar Catálogo de productos con diseño atractivo
+     📱 RESPONSIVE: Grid system Bootstrap para adaptabilidad
+     🎨 DISEÑO: Cards con overlay gradients para información
+     
+     📋 ESTRUCTURA TÉCNICA:
+     - section-padding: Clase custom para spacing consistente
+     - bg-light: Fondo claro para contraste con hero oscuro
+     - Grid 6 productos: 3 columnas en desktop, responsivo
+     
+     💡 MEJORES PRÁCTICAS IMPLEMENTADAS:
+     - Imágenes optimizadas con Unsplash
+     - Alt text descriptivo para SEO
+     - Height fijo para cards uniformes
+     - Badges con colores semánticos
+     -->
+    <section id="portfolio" class="section-padding bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <!-- Título de sección con elementos visuales -->
+                    <div class="section-title">
+                        <h1 class="display-4 fw-semibold">Nuestros Productos</h1>
+                        <div class="line"></div> <!-- Línea decorativa CSS -->
+                        <p>Descubre nuestra selección de equipos remanufacturados y PCs armados personalizados con la mejor relación calidad-precio</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row g-4 justify-content-center">
+                <div class="col-lg-4 col-md-6">
+                    <div class="product-card position-relative overflow-hidden rounded-3 shadow h-100" style="cursor: pointer;" onclick="navegarASeccion('mercadolibre-products')">
+                        <img src="https://images.unsplash.com/photo-1518118627599-2439d264fef7?w=400&h=300&fit=crop&crop=center" alt="Computadoras remanufacturadas" class="img-fluid w-100" style="height: 280px; object-fit: cover;">
+                        <div class="product-overlay position-absolute bottom-0 start-0 w-100 p-4" style="background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);">
+                            <h4 class="text-white fw-bold mb-2">Computadoras Remanufacturadas</h4>
+                            <p class="text-light mb-3 small">Dell, HP, Lenovo con Intel i5/i7, 16GB RAM, SSD.</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="badge bg-primary fs-6 px-3 py-2">Desde $45,000</span>
+                                <small class="text-light">👆 Ver productos</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="product-card position-relative overflow-hidden rounded-3 shadow h-100" style="cursor: pointer;" onclick="navegarASeccion('mercadolibre-products')">
+                        <img src="https://images.unsplash.com/photo-1593305841991-05c297ba4575?w=400&h=300&fit=crop&crop=center" alt="PC Gaming RGB" class="img-fluid w-100" style="height: 280px; object-fit: cover;">
+                        <div class="product-overlay position-absolute bottom-0 start-0 w-100 p-4" style="background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);">
+                            <h4 class="text-white fw-bold mb-2">PCs Gaming</h4>
+                            <p class="text-light mb-3 small">Equipos personalizados para gaming de alto rendimiento.</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="badge bg-success fs-6 px-3 py-2">Desde $120,000</span>
+                                <small class="text-light">👆 Ver productos</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="product-card position-relative overflow-hidden rounded-3 shadow h-100" style="cursor: pointer;" onclick="navegarASeccion('mercadolibre-products')">
+                        <img src="https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=400&h=300&fit=crop&crop=center" alt="Monitores" class="img-fluid w-100" style="height: 280px; object-fit: cover;">
+                        <div class="product-overlay position-absolute bottom-0 start-0 w-100 p-4" style="background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);">
+                            <h4 class="text-white fw-bold mb-2">Monitores</h4>
+                            <p class="text-light mb-3 small">Monitores LED/LCD en óptimo estado, varias marcas.</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="badge bg-warning fs-6 px-3 py-2">Desde $25,000</span>
+                                <small class="text-light">👆 Ver productos</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="product-card position-relative overflow-hidden rounded-3 shadow h-100">
+                        <img src="https://images.unsplash.com/photo-1580052614034-c55d20bfee3b?w=400&h=300&fit=crop&crop=center" alt="Accesorios PC" class="img-fluid w-100" style="height: 280px; object-fit: cover;">
+                        <div class="product-overlay position-absolute bottom-0 start-0 w-100 p-4" style="background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);">
+                            <h4 class="text-white fw-bold mb-2">Accesorios</h4>
+                            <p class="text-light mb-3 small">Teclados, mouse, auriculares y más accesorios.</p>
+                            <span class="badge bg-info fs-6 px-3 py-2">Ver Catálogo</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="product-card position-relative overflow-hidden rounded-3 shadow h-100">
+                        <img src="https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=400&h=300&fit=crop&crop=center" alt="Notebooks" class="img-fluid w-100" style="height: 280px; object-fit: cover;">
+                        <div class="product-overlay position-absolute bottom-0 start-0 w-100 p-4" style="background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);">
+                            <h4 class="text-white fw-bold mb-2">Notebooks</h4>
+                            <p class="text-light mb-3 small">Laptops remanufacturadas y nuevas para trabajo.</p>
+                            <span class="badge bg-secondary fs-6 px-3 py-2">Desde $80,000</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="product-card position-relative overflow-hidden rounded-3 shadow h-100">
+                        <img src="https://images.unsplash.com/photo-1625842268584-8f3296236761?w=400&h=300&fit=crop&crop=center" alt="Servidores" class="img-fluid w-100" style="height: 280px; object-fit: cover;">
+                        <div class="product-overlay position-absolute bottom-0 start-0 w-100 p-4" style="background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);">
+                            <h4 class="text-white fw-bold mb-2">Servidores</h4>
+                            <p class="text-light mb-3 small">Equipos empresariales y servidores refurbished.</p>
+                            <span class="badge bg-dark fs-6 px-3 py-2">Consultar</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>

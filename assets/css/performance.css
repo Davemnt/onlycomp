@@ -1,0 +1,208 @@
+/**
+ * ===== OUTLETTECH - OPTIMIZACIONES DE RENDIMIENTO =====
+ * 
+ * Archivo dedicado a mejorar la velocidad de carga y fluidez
+ */
+
+/* ===== PREVENCIÓN DE LAYOUT SHIFT ===== */
+
+/* Contenedores principales con dimensiones definidas */
+#hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    will-change: scroll-position;
+}
+
+.navbar {
+    height: 70px; /* Altura fija para evitar shift */
+    will-change: background-color, backdrop-filter;
+    transform: translateZ(0); /* Force GPU layer */
+}
+
+/* ===== OPTIMIZACIONES GPU ===== */
+
+/* Elementos que se animan con hardware acceleration */
+.product-showcase,
+.service,
+.product-card,
+.btn {
+    transform: translateZ(0);
+    will-change: transform, opacity;
+}
+
+/* Smooth scrolling optimizado */
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 70px; /* Offset para navbar fijo */
+}
+
+/* ===== LOADING STATES OPTIMIZADOS ===== */
+
+/* Estados iniciales para prevenir FOUC */
+.animate-on-scroll,
+.gsap-element {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.animate-visible,
+.gsap-ready {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ===== MICRO-OPTIMIZACIONES ===== */
+
+/* Reducir repaint en scroll */
+* {
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
+/* Optimizar imágenes */
+img {
+    content-visibility: auto;
+}
+
+/* ===== RESPONSIVE OPTIMIZATIONS ===== */
+
+/* Reducir animaciones en dispositivos de bajo rendimiento */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    
+    html {
+        scroll-behavior: auto;
+    }
+}
+
+/* Optimizaciones móviles */
+@media (max-width: 768px) {
+    .gsap-element {
+        transform: none !important; /* Reducir transformaciones en móvil */
+    }
+    
+    .product-showcase:hover {
+        transform: none; /* Deshabilitar hover effects en touch devices */
+    }
+}
+
+/* ===== PERFORMANCE HINTS ===== */
+
+/* Optimizar rendering de listas */
+.product-grid,
+.services-grid {
+    contain: layout style paint;
+}
+
+/* Optimizar scroll containers */
+.section-container {
+    contain: layout paint;
+}
+
+/* ===== OPTIMIZACIONES ADICIONALES ===== */
+
+/* Mejorar rendering de texto */
+body, * {
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Optimizar transiciones del navbar */
+.navbar-scrolled {
+    background: rgba(33, 37, 41, 0.98) !important;
+    backdrop-filter: blur(15px) saturate(1.5);
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+    box-shadow: 0 4px 30px rgba(0,0,0,0.2);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* Acelerar hover effects */
+.product-showcase {
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+/* Optimizar animaciones críticas */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.6s ease-out forwards;
+}
+
+/* Contenedor principal optimizado */
+main {
+    min-height: 100vh;
+    will-change: scroll-position;
+}
+
+/* ===== ESTILO MEJORADO PARA BOTÓN VER SERVICIOS NARANJA ===== */
+.btn-servicios-naranja {
+    background: #FF8C00 !important;
+    border: 3px solid #FF8C00 !important;
+    color: #fff !important;
+    border-radius: 12px;
+    font-size: 1.2rem;
+    font-weight: 700 !important;
+    letter-spacing: 0.5px;
+    position: relative;
+    overflow: hidden;
+    opacity: 1 !important;
+    box-shadow: 
+        0 6px 20px rgba(255,140,0,0.6),
+        inset 0 2px 0 rgba(255,255,255,0.4),
+        inset 0 -2px 0 rgba(0,0,0,0.2);
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-servicios-naranja:hover {
+    background: #FF7F00 !important;
+    transform: translateY(-4px) scale(1.08);
+    box-shadow: 
+        0 12px 30px rgba(255,140,0,0.8),
+        0 6px 20px rgba(255,140,0,0.4),
+        inset 0 3px 0 rgba(255,255,255,0.5),
+        inset 0 -3px 0 rgba(0,0,0,0.4);
+    color: #fff !important;
+    border-color: #FFB347 !important;
+}
+
+.btn-servicios-naranja:active {
+    transform: translateY(-1px) scale(1.02);
+    box-shadow: 
+        0 4px 15px rgba(255,140,0,0.3),
+        inset 0 1px 0 rgba(0,0,0,0.2),
+        inset 0 -1px 0 rgba(255,255,255,0.2);
+}
+
+/* Efecto de relieve adicional con pseudo-elemento */
+.btn-servicios-naranja::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.2), transparent);
+    border-radius: 8px 8px 0 0;
+    transition: opacity 0.3s ease;
+}
+
+.btn-servicios-naranja:hover::before {
+    opacity: 0.8;
+}
