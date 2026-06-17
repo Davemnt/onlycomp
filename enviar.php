@@ -1,6 +1,6 @@
 <?php
-// OutletTech - Formulario de Contacto Seguro
-define('OUTLETTECH_FORM', true);
+// Only Comp - Formulario de Contacto Seguro
+define('ONLYCOMP_FORM', true);
 
 // Configuración de seguridad
 header('X-Frame-Options: DENY');
@@ -99,7 +99,7 @@ try {
     <body>
         <div class='container'>
             <div class='header'>
-                <h1>🔧 OutletTech - Nueva Consulta</h1>
+                <h1>🔧 Only Comp - Nueva Consulta</h1>
             </div>
             <div class='content'>
                 <div class='info-card'>
