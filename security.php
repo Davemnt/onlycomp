@@ -1,6 +1,6 @@
 <?php
 // Proteger acceso directo
-if (!defined('OUTLETTECH_FORM')) {
+if (!defined('ONLYCOMP_FORM')) {
     die('Acceso denegado');
 }
 

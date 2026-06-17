@@ -560,6 +560,26 @@
     .whatsapp-float i {
         animation: pulse-whatsapp 2s ease-in-out infinite;
     }
+    .wa-label {
+        position: absolute;
+        right: 64px;
+        background: #fff;
+        color: #128c7e;
+        font-size: 0.8rem;
+        font-weight: 700;
+        padding: 5px 12px;
+        border-radius: 20px;
+        white-space: nowrap;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.18);
+        opacity: 0;
+        transform: translateX(6px);
+        transition: opacity 0.25s, transform 0.25s;
+        pointer-events: none;
+    }
+    .whatsapp-float:hover .wa-label {
+        opacity: 1;
+        transform: translateX(0);
+    }
     @keyframes pulse-whatsapp {
         0%, 100% { transform: scale(1); }
         50% { transform: scale(1.1); }
@@ -1131,7 +1151,7 @@
 
                         <div class="contact-trust">
                             <i class="ri-shield-check-fill d-block mb-2" style="color:#10b981;font-size:1.5rem;"></i>
-                            <p style="color:rgba(255,255,255,0.4);font-size:0.78rem;margin:0;">Diagnóstico gratuito · Garantía 3 meses · Presupuesto sin compromiso</p>
+                            <p style="color:rgba(255,255,255,0.4);font-size:0.78rem;margin:0;">Garantía 3 meses · Repuestos originales · Atención personalizada</p>
                         </div>
                     </div>
                 </div>
@@ -1192,6 +1212,7 @@
 
     <!-- WhatsApp Flotante -->
     <a href="#" class="whatsapp-float" id="waFloat" target="_blank" rel="noopener noreferrer" aria-label="Contactar por WhatsApp">
+        <span class="wa-label">Only Comp</span>
         <i class="ri-whatsapp-fill"></i>
     </a>
 
@@ -1425,7 +1446,7 @@
                 // Número de WhatsApp en base64 (no expuesto en HTML)
                 var _wc = 'KzU0OTExNjI2NjI3Njc=';
                 var waNum = atob(_wc);
-                var waUrl = 'https://wa.me/' + waNum;
+                var waUrl = 'https://wa.me/' + waNum + '?text=Hola%20Only%20Comp%2C%20quisiera%20hacer%20una%20consulta.';
                 var waFloat = document.getElementById('waFloat');
                 var waFooter = document.getElementById('waFooter');
                 if (waFloat) waFloat.href = waUrl;
