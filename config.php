@@ -1,13 +1,13 @@
 <?php
-// Configuración de OutletTech - Formulario de Contacto
+// Configuración de Only Comp - Formulario de Contacto
 // IMPORTANTE: Cambia estos valores por los de tu servidor
 
 return [
     // Configuración del correo
     'email' => [
-        'to' => 'info@outlettech.com.ar', // Cambia por tu email real
-        'subject' => 'Nueva consulta desde OutletTech',
-        'from_name' => 'OutletTech',
+        'to' => 'info@onlycomp.com.ar', // Cambia por tu email real
+        'subject' => 'Nueva consulta desde Only Comp',
+        'from_name' => 'Only Comp',
     ],
     
     // Configuración de seguridad
