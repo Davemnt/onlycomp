@@ -28,7 +28,7 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
     RewriteCond %{HTTP_REFERER} !^$
-    RewriteCond %{HTTP_REFERER} !^https?://(www\.)?outlettech\.com [NC]
+    RewriteCond %{HTTP_REFERER} !^https?://(www\.)?onlycomp\.com\.ar [NC]
     RewriteCond %{HTTP_REFERER} !^https?://(www\.)?localhost [NC]
     RewriteRule \.(jpg|jpeg|png|gif|svg)$ - [F,L]
 </IfModule>

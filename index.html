@@ -1312,10 +1312,13 @@
             var msgDiv = document.getElementById('formMessage');
             if (!form) return;
             
-            // Generar token CSRF
+            // Obtener token CSRF desde el servidor
             var tokenInput = document.getElementById('form_token');
             if (tokenInput) {
-                tokenInput.value = Math.random().toString(36).substring(2) + Date.now().toString(36);
+                fetch('token.php')
+                    .then(function(r) { return r.json(); })
+                    .then(function(data) { if (data.token) tokenInput.value = data.token; })
+                    .catch(function() {});
             }
             
             // Registrar tiempo de inicio
@@ -1374,9 +1377,12 @@
                     if (data.success) {
                         showMsg(data.message || '¡Gracias! Tu consulta fue recibida. Te contactamos a la brevedad.', 'success');
                         form.reset();
-                        // Generar nuevo token
+                        // Obtener nuevo token del servidor
                         if (tokenInput) {
-                            tokenInput.value = Math.random().toString(36).substring(2) + Date.now().toString(36);
+                            fetch('token.php')
+                                .then(function(r) { return r.json(); })
+                                .then(function(data) { if (data.token) tokenInput.value = data.token; })
+                                .catch(function() {});
                         }
                         sessionStorage.setItem('form_start_time', Date.now());
                     } else {
