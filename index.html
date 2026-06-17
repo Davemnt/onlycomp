@@ -563,33 +563,6 @@
         animation: pulse-whatsapp 2s ease-in-out infinite;
         pointer-events: none;
     }
-    .wa-tooltip {
-        position: absolute;
-        right: 64px; top: 50%;
-        transform: translateY(-50%) translateX(6px);
-        background: #fff; color: #075e54;
-        font-size: 0.82rem; font-weight: 600;
-        padding: 7px 14px;
-        border-radius: 20px;
-        white-space: nowrap;
-        box-shadow: 0 2px 12px rgba(0,0,0,0.15);
-        opacity: 0;
-        transition: opacity 0.25s, transform 0.25s;
-        pointer-events: none;
-    }
-    .wa-tooltip::after {
-        content: '';
-        position: absolute;
-        right: -8px; top: 50%;
-        transform: translateY(-50%);
-        border: 8px solid transparent;
-        border-right: none;
-        border-left-color: #fff;
-    }
-    .whatsapp-float:hover .wa-tooltip {
-        opacity: 1;
-        transform: translateY(-50%) translateX(0);
-    }
     .wa-popup {
         background: #fff;
         border-radius: 16px;
@@ -1298,7 +1271,6 @@
             </div>
         </div>
         <button class="whatsapp-float" id="waFloat" aria-label="Contactar por WhatsApp">
-            <span class="wa-tooltip">¿En qué podemos ayudarte?</span>
             <i class="ri-whatsapp-fill"></i>
         </button>
     </div>
@@ -1541,8 +1513,9 @@
             try {
                 // Número de WhatsApp en base64 (no expuesto en HTML)
                 var _wc = 'KzU0OTExNjI2NjI3Njc=';
-                var waNum = atob(_wc);
-                var waUrl = 'https://wa.me/' + waNum + '?text=Hola%20Only%20Comp%2C%20quisiera%20hacer%20una%20consulta.';
+                var waNum = atob(_wc).replace(/\+/g, '');
+                var waMsg = encodeURIComponent('¡Hola Only Comp! Los contacto desde su página web onlycomp.com.ar 👋');
+                var waUrl = 'https://wa.me/' + waNum + '?text=' + waMsg;
                 var waStartChat = document.getElementById('waStartChat');
                 var waFooter = document.getElementById('waFooter');
                 if (waStartChat) waStartChat.href = waUrl;
