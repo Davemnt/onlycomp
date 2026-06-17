@@ -530,56 +530,120 @@
     .social-icon:hover { color: var(--blue-l); transform: translateY(-2px); }
 
     /* ============================
-       WHATSAPP
+       WHATSAPP WIDGET
     ============================ */
-    .whatsapp-float {
+    .wa-widget {
         position: fixed; bottom: 28px; right: 28px;
+        z-index: 999;
+        display: flex; flex-direction: column; align-items: flex-end; gap: 12px;
+    }
+    .whatsapp-float {
         width: 56px; height: 56px;
         background: #25d366; color: #fff;
+        border: none; cursor: pointer;
         border-radius: 50%;
         display: flex; align-items: center; justify-content: center;
         font-size: 1.65rem;
         box-shadow: 0 4px 22px rgba(37,211,102,0.38);
-        z-index: 999; text-decoration: none;
         transition: all 0.3s;
-        opacity: 0;
-        visibility: hidden;
+        opacity: 0; visibility: hidden;
         transform: scale(0.8) translateY(20px);
+        position: relative; padding: 0; outline: none;
     }
     .whatsapp-float.show {
-        opacity: 1;
-        visibility: visible;
+        opacity: 1; visibility: visible;
         transform: scale(1) translateY(0);
     }
-    .whatsapp-float:hover { 
-        background: #128c7e; 
-        color: #fff; 
-        transform: scale(1.1) translateY(0); 
+    .whatsapp-float:hover, .whatsapp-float:focus {
+        background: #128c7e; color: #fff;
+        transform: scale(1.1) translateY(0);
         box-shadow: 0 6px 30px rgba(37,211,102,0.5);
     }
     .whatsapp-float i {
         animation: pulse-whatsapp 2s ease-in-out infinite;
+        pointer-events: none;
     }
-    .wa-label {
+    .wa-tooltip {
         position: absolute;
-        right: 64px;
-        background: #fff;
-        color: #128c7e;
-        font-size: 0.8rem;
-        font-weight: 700;
-        padding: 5px 12px;
+        right: 64px; top: 50%;
+        transform: translateY(-50%) translateX(6px);
+        background: #fff; color: #075e54;
+        font-size: 0.82rem; font-weight: 600;
+        padding: 7px 14px;
         border-radius: 20px;
         white-space: nowrap;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.18);
+        box-shadow: 0 2px 12px rgba(0,0,0,0.15);
         opacity: 0;
-        transform: translateX(6px);
         transition: opacity 0.25s, transform 0.25s;
         pointer-events: none;
     }
-    .whatsapp-float:hover .wa-label {
-        opacity: 1;
-        transform: translateX(0);
+    .wa-tooltip::after {
+        content: '';
+        position: absolute;
+        right: -8px; top: 50%;
+        transform: translateY(-50%);
+        border: 8px solid transparent;
+        border-right: none;
+        border-left-color: #fff;
     }
+    .whatsapp-float:hover .wa-tooltip {
+        opacity: 1;
+        transform: translateY(-50%) translateX(0);
+    }
+    .wa-popup {
+        background: #fff;
+        border-radius: 16px;
+        box-shadow: 0 8px 40px rgba(0,0,0,0.2);
+        width: 280px; overflow: hidden;
+        opacity: 0; visibility: hidden;
+        transform: scale(0.9) translateY(10px);
+        transform-origin: bottom right;
+        transition: opacity 0.25s, transform 0.25s, visibility 0.25s;
+    }
+    .wa-popup.open {
+        opacity: 1; visibility: visible;
+        transform: scale(1) translateY(0);
+    }
+    .wa-popup-header {
+        background: #25d366;
+        padding: 14px 16px;
+        display: flex; align-items: center; gap: 10px;
+        color: #fff;
+    }
+    .wa-popup-avatar {
+        width: 40px; height: 40px;
+        background: rgba(255,255,255,0.25);
+        border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1.2rem; flex-shrink: 0;
+    }
+    .wa-popup-info { flex: 1; }
+    .wa-popup-name { display: block; font-weight: 700; font-size: 0.95rem; }
+    .wa-popup-status { font-size: 0.72rem; opacity: 0.85; }
+    .wa-popup-close {
+        background: none; border: none; color: #fff;
+        font-size: 1.3rem; cursor: pointer; padding: 0;
+        opacity: 0.8; transition: opacity 0.2s; line-height: 1;
+    }
+    .wa-popup-close:hover { opacity: 1; }
+    .wa-popup-body { padding: 14px; background: #ece5dd; }
+    .wa-popup-bubble {
+        background: #fff;
+        border-radius: 0 12px 12px 12px;
+        padding: 10px 12px; max-width: 92%;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .wa-popup-bubble p { margin: 0 0 4px; font-size: 0.88rem; color: #333; line-height: 1.45; }
+    .wa-bubble-time { font-size: 0.68rem; color: #999; }
+    .wa-popup-footer { padding: 10px 14px; background: #fff; }
+    .wa-popup-btn {
+        display: flex; align-items: center; justify-content: center; gap: 8px;
+        background: #25d366; color: #fff;
+        border-radius: 24px; padding: 10px;
+        text-decoration: none; font-weight: 600; font-size: 0.88rem;
+        transition: background 0.2s;
+    }
+    .wa-popup-btn:hover { background: #128c7e; color: #fff; }
     @keyframes pulse-whatsapp {
         0%, 100% { transform: scale(1); }
         50% { transform: scale(1.1); }
@@ -1210,11 +1274,34 @@
         </div>
     </footer>
 
-    <!-- WhatsApp Flotante -->
-    <a href="#" class="whatsapp-float" id="waFloat" target="_blank" rel="noopener noreferrer" aria-label="Contactar por WhatsApp">
-        <span class="wa-label">Only Comp</span>
-        <i class="ri-whatsapp-fill"></i>
-    </a>
+    <!-- WhatsApp Widget -->
+    <div class="wa-widget" id="waWidget">
+        <div class="wa-popup" id="waPopup" role="dialog" aria-label="Chat Only Comp">
+            <div class="wa-popup-header">
+                <div class="wa-popup-avatar"><i class="ri-whatsapp-fill"></i></div>
+                <div class="wa-popup-info">
+                    <span class="wa-popup-name">Only Comp</span>
+                    <span class="wa-popup-status">&#9679; En línea</span>
+                </div>
+                <button class="wa-popup-close" id="waPopupClose" aria-label="Cerrar">&times;</button>
+            </div>
+            <div class="wa-popup-body">
+                <div class="wa-popup-bubble">
+                    <p>¡Hola! 👋 ¿En qué podemos ayudarte hoy?</p>
+                    <span class="wa-bubble-time">Only Comp</span>
+                </div>
+            </div>
+            <div class="wa-popup-footer">
+                <a id="waStartChat" href="#" target="_blank" rel="noopener noreferrer" class="wa-popup-btn">
+                    <i class="ri-whatsapp-fill"></i> Iniciar Chat
+                </a>
+            </div>
+        </div>
+        <button class="whatsapp-float" id="waFloat" aria-label="Contactar por WhatsApp">
+            <span class="wa-tooltip">¿En qué podemos ayudarte?</span>
+            <i class="ri-whatsapp-fill"></i>
+        </button>
+    </div>
 
     <!-- SCRIPTS -->
     <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -1290,27 +1377,36 @@
         window.addEventListener('scroll', updateSpy, { passive: true });
         updateSpy();
         
-        // WhatsApp flotante - mostrar al llegar a contacto
+        // WhatsApp widget
         function initWhatsApp() {
-            var whatsappBtn = document.querySelector('.whatsapp-float');
-            var contactSection = document.getElementById('contact');
-            if (!whatsappBtn || !contactSection) return;
-            
-            function checkWhatsApp() {
-                var contactRect = contactSection.getBoundingClientRect();
-                var windowHeight = window.innerHeight;
-                
-                // Mostrar WhatsApp cuando la sección de contacto está visible
-                // Se activa cuando la sección está dentro del viewport (con 200px de margen)
-                if (contactRect.top < windowHeight - 200) {
-                    whatsappBtn.classList.add('show');
-                } else {
-                    whatsappBtn.classList.remove('show');
-                }
+            var waBtn = document.getElementById('waFloat');
+            var waPopup = document.getElementById('waPopup');
+            var waClose = document.getElementById('waPopupClose');
+            if (!waBtn) return;
+
+            // Mostrar el botón 1.2s después de cargar la página
+            setTimeout(function() { waBtn.classList.add('show'); }, 1200);
+
+            // Abrir/cerrar popup al hacer click en el botón
+            waBtn.addEventListener('click', function() {
+                if (waPopup) waPopup.classList.toggle('open');
+            });
+
+            // Cerrar popup con el botón X
+            if (waClose) {
+                waClose.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    if (waPopup) waPopup.classList.remove('open');
+                });
             }
-            
-            window.addEventListener('scroll', checkWhatsApp, { passive: true });
-            checkWhatsApp(); // Check inicial
+
+            // Cerrar popup al hacer click fuera del widget
+            document.addEventListener('click', function(e) {
+                var widget = document.getElementById('waWidget');
+                if (waPopup && waPopup.classList.contains('open') && widget && !widget.contains(e.target)) {
+                    waPopup.classList.remove('open');
+                }
+            });
         }
 
         // Reveal on scroll
@@ -1447,9 +1543,9 @@
                 var _wc = 'KzU0OTExNjI2NjI3Njc=';
                 var waNum = atob(_wc);
                 var waUrl = 'https://wa.me/' + waNum + '?text=Hola%20Only%20Comp%2C%20quisiera%20hacer%20una%20consulta.';
-                var waFloat = document.getElementById('waFloat');
+                var waStartChat = document.getElementById('waStartChat');
                 var waFooter = document.getElementById('waFooter');
-                if (waFloat) waFloat.href = waUrl;
+                if (waStartChat) waStartChat.href = waUrl;
                 if (waFooter) waFooter.href = waUrl;
             } catch(e) { /* silencioso */ }
         }
