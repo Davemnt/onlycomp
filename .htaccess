@@ -67,5 +67,8 @@
     FcgidMaxRequestLen 1048576
 </IfModule>
 
+# Tipos MIME para sitemap
+AddType application/xml .xml
+
 # Error 404 personalizado (opcional)
 # ErrorDocument 404 /404.html
